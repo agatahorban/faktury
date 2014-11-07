@@ -9,5 +9,9 @@
   <modules>
     <module>FakturySerwer-ear</module>
     <module>FakturyEncje</module>
+    <module>FakturyDAO</module>
+    <module>FakturyRemoteInterfaces</module>
+    <module>FakturyClient</module>
+    <module>FakturyGUI</module>
   </modules>
 </project>
