@@ -5,12 +5,14 @@ import com.assen.faktury.remoteinterfaces.IFakturyDAORemote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 
 /**
  *
  * @author Arek
  */
 @Stateless
+@Transactional
 public class FakturyDAO implements IFakturyDAORemote {
 
     @PersistenceContext
