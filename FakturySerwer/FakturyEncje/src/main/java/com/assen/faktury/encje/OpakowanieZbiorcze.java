@@ -30,7 +30,7 @@ public class OpakowanieZbiorcze implements Serializable {
     private String nazwaPelna;
 
     @Column
-    private short pojemnosc;
+    private int pojemnosc;
 
     @Column
     private double waga;
@@ -68,11 +68,11 @@ public class OpakowanieZbiorcze implements Serializable {
         this.nazwaPelna = nazwaPelna;
     }
 
-    public short getPojemnosc() {
+    public int getPojemnosc() {
         return pojemnosc;
     }
 
-    public void setPojemnosc(short pojemnosc) {
+    public void setPojemnosc(int pojemnosc) {
         this.pojemnosc = pojemnosc;
     }
 

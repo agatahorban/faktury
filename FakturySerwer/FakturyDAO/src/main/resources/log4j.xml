@@ -7,7 +7,7 @@
             <param name="ConversionPattern" value="%-5p %c{1} - %m%n" />
         </layout>
     </appender>
-    <logger name="com.assen">
+    <logger name="com.assen.faktury.dao">
         <level value="debug" />
     </logger>
     <root>

@@ -41,7 +41,7 @@ public class Kontrahent implements Serializable {
     private String nazwaPelna;
 
     @Column(name = "nip")
-    @Length(min = 14, max = 14)
+    @Length(min = 10, max = 13)
     private String NIP;
 
     @ManyToOne
