@@ -1,5 +1,6 @@
 package com.assen.faktury.encje;
 
+import com.assen.faktury.encje.base.BaseEntity;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Length;
 
 /**
@@ -15,7 +17,7 @@ import org.hibernate.validator.constraints.Length;
  */
 @Entity
 @Table(name = "adres")
-public class Adres implements Serializable{
+public class Adres extends BaseEntity implements Serializable{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +25,8 @@ public class Adres implements Serializable{
     private int id;
     
     @Column
-    @Length(max = 50)
+//    @Length(max = 50)
+    @Size(max = 50)
     private String ulica;
     
     @Column
@@ -33,27 +36,33 @@ public class Adres implements Serializable{
     private int lokal;
     
     @Column(name = "kod_pocztowy")
-    @Length(max = 6)
+//    @Length(max = 6)
+    @Size(max = 6)
     private String kodPocztowy;
     
     @Column
-    @Length(max = 50)
+//    @Length(max = 50)
+    @Size(max = 50)
     private String miejscowosc;
     
     @Column
-    @Length(max = 50)
+//    @Length(max = 50)
+    @Size(max = 50)
     private String gmina;
     
     @Column
-    @Length(max = 50)
+//    @Length(max = 50)
+    @Size(max = 50)
     private String powiat;
     
     @Column
-    @Length(max = 50)
+//    @Length(max = 50)
+    @Size(max = 50)
     private String wojewodztwo;
     
     @Column
-    @Length(max = 50)
+//    @Length(max = 50)
+    @Size(max = 50)
     private String panstwo;
 
     public int getId() {

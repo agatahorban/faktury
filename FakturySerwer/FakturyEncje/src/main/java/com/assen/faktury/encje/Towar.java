@@ -1,5 +1,7 @@
 package com.assen.faktury.encje;
 
+import com.assen.faktury.encje.base.BaseEntity;
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,7 +17,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "towar")
-public class Towar {
+public class Towar extends BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

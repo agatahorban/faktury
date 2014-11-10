@@ -1,5 +1,6 @@
 package com.assen.faktury.encje;
 
+import com.assen.faktury.encje.base.BaseEntity;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Length;
 
 /**
@@ -17,7 +19,7 @@ import org.hibernate.validator.constraints.Length;
  */
 @Entity
 @Table(name = "kontrahent")
-public class Kontrahent implements Serializable {
+public class Kontrahent extends BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,14 +36,14 @@ public class Kontrahent implements Serializable {
     private boolean czyPlatnikVAT;
 
     @Column(name = "nazwa_skrocona")
-    @Length(max = 30)
+    @Size(max = 30)
     private String nazwaSkrocona;
 
     @Column(name = "nazwa_pelna")
     private String nazwaPelna;
 
     @Column(name = "nip")
-    @Length(min = 10, max = 13)
+    @Size(min = 10, max = 13)
     private String NIP;
 
     @ManyToOne

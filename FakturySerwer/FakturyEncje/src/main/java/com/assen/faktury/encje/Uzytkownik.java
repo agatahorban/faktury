@@ -1,5 +1,6 @@
 package com.assen.faktury.encje;
 
+import com.assen.faktury.encje.base.BaseEntity;
 import com.assen.faktury.model.TypUzytkownika;
 import java.io.Serializable;
 import javax.persistence.Column;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Length;
 
 /**
@@ -20,7 +22,7 @@ import org.hibernate.validator.constraints.Length;
  */
 @Entity
 @Table(name = "uzytkownik")
-public class Uzytkownik implements Serializable {
+public class Uzytkownik extends BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +30,7 @@ public class Uzytkownik implements Serializable {
     private int id;
 
     @Column(name = "login", unique = true)
-    @Length(max = 30)
+    @Size(max = 30)
     private String login;
 
     @Column(name = "haslo")

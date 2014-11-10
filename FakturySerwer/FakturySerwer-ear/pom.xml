@@ -36,9 +36,31 @@
                 <configuration>
                     <version>6</version>
                     <defaultLibBundleDir>lib</defaultLibBundleDir>
+                    <modules>
+                        <jarModule>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>FakturyEncje</artifactId>
+                        </jarModule>
+                        <ejbModule>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>FakturyDAO</artifactId>
+                        </ejbModule>
+                    </modules>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-    
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>FakturyEncje</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>FakturyDAO</artifactId>
+            <version>${project.version}</version>
+            <type>ejb</type>
+        </dependency>
+    </dependencies>
 </project>

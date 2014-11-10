@@ -1,5 +1,6 @@
 package com.assen.faktury.encje;
 
+import com.assen.faktury.encje.base.BaseEntity;
 import com.assen.faktury.model.KodDokumentu;
 import java.io.Serializable;
 import java.util.Date;
@@ -17,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Length;
 
 /**
@@ -25,7 +27,7 @@ import org.hibernate.validator.constraints.Length;
  */
 @Entity
 @Table(name = "faktura_vat")
-public class FakturaVAT implements Serializable {
+public class FakturaVAT extends BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +39,7 @@ public class FakturaVAT implements Serializable {
     private KodDokumentu kodDokumentu;
 
     @Column
-    @Length(max = 20)
+    @Size(max = 20)
     private String maska;
 
     @Column

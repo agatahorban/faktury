@@ -1,5 +1,6 @@
 package com.assen.faktury.encje;
 
+import com.assen.faktury.encje.base.BaseEntity;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -7,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Length;
 
 /**
@@ -15,7 +17,7 @@ import org.hibernate.validator.constraints.Length;
  */
 @Entity
 @Table(name = "bank")
-public class Bank implements Serializable {
+public class Bank extends BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,15 +25,17 @@ public class Bank implements Serializable {
     private int id;
 
     @Column
-    @Length(max = 30)
+//    @Length(max = 30)
+    @Size(max = 30)
     private String nazwaBanku;
 
     @Column
-    @Length(max = 5)
+//    @Length(max = 5)
+    @Size(max = 5)
     private String waluta;
 
     @Column(unique = true)
-    @Length(min = 26, max = 26)
+    @Size(min = 26, max = 26)
     private String numer;
 
     public int getId() {

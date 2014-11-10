@@ -1,5 +1,6 @@
 package com.assen.faktury.dao.base;
 
+import com.assen.faktury.encje.base.BaseEntity;
 import java.io.Serializable;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  *
  * @author Arek
  */
-public interface ICrudDao<T extends Object> {
+public interface ICrudDao<T extends BaseEntity> {
 
     void insert(T entity);
     
