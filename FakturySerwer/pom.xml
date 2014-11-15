@@ -27,30 +27,30 @@
             </dependency>
         
             <!--Slf4j-->
-            <dependency>
+<!--            <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>1.7.7</version>
-                <!--<version>1.5.6</version>-->
+                <version>1.5.6</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-log4j12</artifactId>
                 <version>1.7.7</version>
-                <!--<version>1.5.6</version>-->
+                <version>1.5.6</version>
                 <scope>runtime</scope>
-            </dependency>
+            </dependency>-->
             
             <!--Hibernate-->
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-core</artifactId>
-                <version>4.3.6.Final</version>
+                <version>4.3.5.Final</version>
             </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-entitymanager</artifactId>
-                <version>4.3.6.Final</version>
+                <version>4.3.5.Final</version>
             </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>
@@ -83,12 +83,6 @@
                 <groupId>org.jboss.arquillian.junit</groupId>
                 <artifactId>arquillian-junit-container</artifactId>
                 <version>1.0.3.Final</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.glassfish.main.extras</groupId>
-                <artifactId>glassfish-embedded-all</artifactId>
-                <version>4.0</version>
                 <scope>test</scope>
             </dependency>
             

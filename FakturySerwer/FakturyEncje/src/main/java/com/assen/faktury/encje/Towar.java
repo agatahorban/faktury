@@ -1,6 +1,5 @@
 package com.assen.faktury.encje;
 
-import com.assen.faktury.encje.base.BaseEntity;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,7 +16,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "towar")
-public class Towar extends BaseEntity implements Serializable {
+public class Towar implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,8 +48,12 @@ public class Towar extends BaseEntity implements Serializable {
     private StawkaVAT stawka;
 
     @ManyToOne
-    @JoinColumn(name = "jednostka_miaryid")
+    @JoinColumn(name = "jednostka_miary_id")
     private JednostkaMiary jednostka;
+    
+    @ManyToOne
+    @JoinColumn(name = "dostawca_id")
+    private Kontrahent dostawca;
 
     public int getId() {
         return id;
@@ -124,4 +127,11 @@ public class Towar extends BaseEntity implements Serializable {
         this.jednostka = jednostka;
     }
 
+    public Kontrahent getDostawca() {
+        return dostawca;
+    }
+
+    public void setDostawca(Kontrahent dostawca) {
+        this.dostawca = dostawca;
+    }
 }

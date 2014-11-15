@@ -1,6 +1,5 @@
 package com.assen.faktury.dao.base;
 
-import com.assen.faktury.encje.base.BaseEntity;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -12,7 +11,7 @@ import javax.persistence.PersistenceContext;
  *
  * @author Arek
  */
-public abstract class CrudDao<T extends BaseEntity> implements ICrudDao<T>, Serializable {
+public abstract class CrudDao<T extends Serializable> implements ICrudDao<T>, Serializable {
 
     @PersistenceContext
     protected EntityManager em;
@@ -20,10 +19,10 @@ public abstract class CrudDao<T extends BaseEntity> implements ICrudDao<T>, Seri
 //    protected Logger logger;
     private Class<T> entityClass;
 
-    protected CrudDao() {
-        entityClass = (Class) ((java.lang.reflect.ParameterizedType) this
-                .getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-    }
+//    protected CrudDao() {
+//        entityClass = (Class) ((java.lang.reflect.ParameterizedType) this
+//                .getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+//    }
 
     public CrudDao(Class<T> entityClass) {
         this.entityClass = entityClass;
