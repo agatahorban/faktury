@@ -18,10 +18,16 @@
         <class>com.assen.faktury.encje.Towar</class>
         <class>com.assen.faktury.encje.Uzytkownik</class>
         <class>com.assen.faktury.encje.WydanieZewnetrzne</class>
+        <class>com.assen.faktury.encje.FakturaFZTowary</class>
+        <class>com.assen.faktury.encje.FakturaVATTowary</class>
+        <class>com.assen.faktury.encje.Magazyn</class>
+        <class>com.assen.faktury.encje.MagazynTowary</class>
+        <class>com.assen.faktury.encje.PrzychodZewnetrznyTowary</class>
+        <class>com.assen.faktury.encje.WydanieZewnetrzneTowary</class>
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
             <property name="hibernate.temp.use_jdbc_metadata_defaults" value="false"/>
             <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>

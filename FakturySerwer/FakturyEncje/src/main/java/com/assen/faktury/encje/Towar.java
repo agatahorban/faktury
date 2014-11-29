@@ -54,6 +54,9 @@ public class Towar implements Serializable {
     @ManyToOne
     @JoinColumn(name = "dostawca_id")
     private Kontrahent dostawca;
+    
+    @Column
+    private int ilosc;
 
     public int getId() {
         return id;
@@ -133,5 +136,13 @@ public class Towar implements Serializable {
 
     public void setDostawca(Kontrahent dostawca) {
         this.dostawca = dostawca;
+    }
+
+    public int getIlosc() {
+        return ilosc;
+    }
+
+    public void setIlosc(int ilosc) {
+        this.ilosc = ilosc;
     }
 }

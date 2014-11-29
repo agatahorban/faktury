@@ -2,12 +2,15 @@ package com.assen.faktury.encje;
 
 import com.assen.faktury.model.KodDokumentu;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -61,9 +64,13 @@ public class FakturaVAT implements Serializable {
     @ManyToOne
     @JoinColumn(name = "sprzedawca_id")
     private Uzytkownik sprzedawca;
-
-    @OneToMany
-    private List<Towar> listaTowarow;
+    
+    @OneToMany(mappedBy = "fakturaVAT", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<FakturaVATTowary> listaTowarow;
+    
+    public FakturaVAT() {
+        listaTowarow = new ArrayList<>();
+    }
 
     public int getId() {
         return id;
@@ -138,12 +145,11 @@ public class FakturaVAT implements Serializable {
         this.sprzedawca = sprzedawca;
     }
 
-    public List<Towar> getListaTowarow() {
+    public List<FakturaVATTowary> getListaTowarow() {
         return listaTowarow;
     }
 
-    public void setListaTowarow(List<Towar> listaTowarow) {
+    public void setListaTowarow(List<FakturaVATTowary> listaTowarow) {
         this.listaTowarow = listaTowarow;
     }
-
 }

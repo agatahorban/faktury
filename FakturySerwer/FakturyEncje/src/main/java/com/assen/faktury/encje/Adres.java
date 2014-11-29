@@ -23,7 +23,6 @@ public class Adres implements Serializable{
     private int id;
     
     @Column
-//    @Length(max = 50)
     @Size(max = 50)
     private String ulica;
     
@@ -34,32 +33,26 @@ public class Adres implements Serializable{
     private int lokal;
     
     @Column(name = "kod_pocztowy")
-//    @Length(max = 6)
     @Size(max = 6)
     private String kodPocztowy;
     
     @Column
-//    @Length(max = 50)
     @Size(max = 50)
     private String miejscowosc;
     
     @Column
-//    @Length(max = 50)
     @Size(max = 50)
     private String gmina;
     
     @Column
-//    @Length(max = 50)
     @Size(max = 50)
     private String powiat;
     
     @Column
-//    @Length(max = 50)
     @Size(max = 50)
     private String wojewodztwo;
     
     @Column
-//    @Length(max = 50)
     @Size(max = 50)
     private String panstwo;
 

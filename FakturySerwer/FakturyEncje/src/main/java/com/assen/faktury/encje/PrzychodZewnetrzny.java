@@ -2,12 +2,15 @@ package com.assen.faktury.encje;
 
 import com.assen.faktury.model.KodDokumentu;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -57,9 +60,13 @@ public class PrzychodZewnetrzny implements Serializable {
 
     @Column(name = "numer_wz_dostawcy")
     private int numerWZdostawcy;
-
-    @OneToMany
-    private List<Towar> listaTowarow;
+    
+    @OneToMany(mappedBy = "przychodZewnetrzny", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<PrzychodZewnetrznyTowary> listaTowarow;
+    
+    public PrzychodZewnetrzny() {
+        listaTowarow = new ArrayList<>();
+    }
 
     public int getId() {
         return id;
@@ -125,12 +132,11 @@ public class PrzychodZewnetrzny implements Serializable {
         this.numerWZdostawcy = numerWZdostawcy;
     }
 
-    public List<Towar> getListaTowarow() {
+    public List<PrzychodZewnetrznyTowary> getListaTowarow() {
         return listaTowarow;
     }
 
-    public void setListaTowarow(List<Towar> listaTowarow) {
+    public void setListaTowarow(List<PrzychodZewnetrznyTowary> listaTowarow) {
         this.listaTowarow = listaTowarow;
     }
-
 }

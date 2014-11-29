@@ -2,12 +2,15 @@ package com.assen.faktury.encje;
 
 import com.assen.faktury.model.KodDokumentu;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -60,9 +63,13 @@ public class FakturaFZ implements Serializable {
     @ManyToOne
     @JoinColumn(name = "odbiorca_id")
     private Uzytkownik odbiorca;
-
-    @OneToMany
-    private List<Towar> listaTowarow;
+    
+    @OneToMany(mappedBy = "fakturaFZ", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<FakturaFZTowary> listaTowarow;
+    
+    public FakturaFZ() {
+        listaTowarow = new ArrayList<>();
+    }
 
     public int getId() {
         return id;
@@ -136,12 +143,11 @@ public class FakturaFZ implements Serializable {
         this.odbiorca = odbiorca;
     }
 
-    public List<Towar> getListaTowarow() {
+    public List<FakturaFZTowary> getListaTowarow() {
         return listaTowarow;
     }
 
-    public void setListaTowarow(List<Towar> listaTowarow) {
+    public void setListaTowarow(List<FakturaFZTowary> listaTowarow) {
         this.listaTowarow = listaTowarow;
     }
-
 }

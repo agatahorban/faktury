@@ -2,12 +2,15 @@ package com.assen.faktury.encje;
 
 import com.assen.faktury.model.KodDokumentu;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -58,9 +61,13 @@ public class WydanieZewnetrzne implements Serializable {
     @ManyToOne
     @JoinColumn(name = "sprzedawca_id")
     private Uzytkownik sprzedawca;
-
-    @OneToMany
-    private List<Towar> listaTowarow;
+    
+    @OneToMany(mappedBy = "wydanieZewnetrzne", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<WydanieZewnetrzneTowary> listaTowarow;
+    
+    public WydanieZewnetrzne() {
+        listaTowarow = new ArrayList<>();
+    }
 
     public int getId() {
         return id;
@@ -118,14 +125,6 @@ public class WydanieZewnetrzne implements Serializable {
         this.sprzedawca = sprzedawca;
     }
 
-    public List<Towar> getListaTowarow() {
-        return listaTowarow;
-    }
-
-    public void setListaTowarow(List<Towar> listaTowarow) {
-        this.listaTowarow = listaTowarow;
-    }
-
     public Date getDataWystawienia() {
         return dataWystawienia;
     }
@@ -134,4 +133,11 @@ public class WydanieZewnetrzne implements Serializable {
         this.dataWystawienia = dataWystawienia;
     }
 
+    public List<WydanieZewnetrzneTowary> getListaTowarow() {
+        return listaTowarow;
+    }
+
+    public void setListaTowarow(List<WydanieZewnetrzneTowary> listaTowarow) {
+        this.listaTowarow = listaTowarow;
+    }
 }
