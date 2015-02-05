@@ -35,15 +35,11 @@ The project uses Glassfish 4.1 as an application server and PostgreSQL as a data
 		* Pool Name: *FakturyPool*
 	5. Click ok and finish
 
-#### Database configuration ####
+##### Database configuration #####
 Create a new role in PostgreSQL(name, password). Then create a new database called FakturyDB and grant all options to new role.
 
 #### How to run tests ####
 Tests run using Arquillian and remote glassfish server. To run tests you need to start your server first. 
-
-* Deployment instructions
-
-### Contribution guidelines ###
 
 #### Writing tests ####
 Test should use Arquillian and by deployed to remote glassfish server for an EJB beans.
