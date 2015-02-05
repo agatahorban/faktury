@@ -15,8 +15,10 @@ The project uses Glassfish 4.1 as an application server and PostgreSQL as a data
 
 #### Configuration ####
 Glassfish configuration:
-1.  Copy postgresql-x.x-xxx.jdbc jar file into domain */lib* folder (located in glassfish installation folder under *domains/domain1*; If you installed glassfish with NetBeans the domain1 folder path is:* C:/Users/User_name/AppData/Roaming/NetBeans/version/config/Glassfish/.../domain1/lib*)
-2.  Start glassfish domain console and open JDBC connection pool
+1.   Copy postgresql-x.x-xxx.jdbc jar file into domain */lib* folder.
+	- located in glassfish installation folder under *domains/domain1*
+	- If you installed glassfish with NetBeans the domain1 folder path is: *C:/Users/User_name/AppData/Roaming/NetBeans/version/config/Glassfish/.../domain1/lib*
+2.   Start glassfish domain console and open JDBC connection pool.
 	1. Create a new connection pool:
 		- Pool Name: *FakturyPool*
 		- Resource type: *javax.sql.DataSource*
