@@ -14,7 +14,7 @@ This project is for creating a business desktop aplication using JavaEE and Java
 The project uses Glassfish 4.1 as an application server and PostgreSQL as a database vendor.
 
 #### Configuration ####
-Glassfish configuration:
+##### Glassfish configuration: #####
 1. Copy postgresql-x.x-xxx.jdbc jar file into domain */lib* folder.
 	* located in glassfish installation folder under *domains/domain1*
 	* If you installed glassfish with NetBeans the domain1 folder path is: *C:/Users/User_name/AppData/Roaming/NetBeans/version/config/Glassfish/.../domain1/lib*
