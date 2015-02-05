@@ -16,22 +16,22 @@ The project uses Glassfish 4.1 as an application server and PostgreSQL as a data
 #### Configuration ####
 Glassfish configuration:
 1. Copy postgresql-x.x-xxx.jdbc jar file into domain */lib* folder (located in glassfish installation folder under *domains/domain1*; If you installed glassfish with NetBeans the domain1 folder path is:* C:/Users/User_name/AppData/Roaming/NetBeans/version/config/Glassfish/.../domain1/lib*)
-2. Start glassfish domain console and open JDBC connection pool
-3. Create a new connection pool:
+1. Start glassfish domain console and open JDBC connection pool
+1. Create a new connection pool:
 - Pool Name: *FakturyPool*
 - Resource type: *javax.sql.DataSource*
 - Vendor: *Postgresql*
-4. Click Next and add properties: 
+1. Click Next and add properties: 
 - User: *xxxxxx*
 - Password: *xxxxx*
 - ServerName: *localhost*
 - PortNumber: *5432*
 - DatabaseName: *FakturyDB*
-5. Click finish and check connection by clicking 'ping'
-6. Create JDBC Resource:
+1. Click finish and check connection by clicking 'ping'
+1. Create JDBC Resource:
 - JNDI Name: *jdbc/assenFakturyDB*
 - Pool Name: *FakturyPool*
-7. Click ok and finish
+1. Click ok and finish
 
 #### Database configuration ####
 Create a new role in PostgreSQL(name, password). Then create a new database called FakturyDB and grant all options to new role.
@@ -44,4 +44,4 @@ Tests run using Arquillian and remote glassfish server. To run tests you need to
 ### Contribution guidelines ###
 
 #### Writing tests ####
-Test should use Arquillian and by deployed to remote glassfish server for an EJB beans. 
+Test should use Arquillian and by deployed to remote glassfish server for an EJB beans.
