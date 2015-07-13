@@ -4,7 +4,7 @@ package com.assen.faktury.model;
  *
  * @author Agata
  */
-public enum TypUzytkownika {
+public enum UserType {
     ADMINISTRATOR,
-    PRACOWNIK
+    WORKER
 }

@@ -4,7 +4,7 @@ package com.assen.faktury.model;
  *
  * @author Agata
  */
-public enum KodDokumentu {
+public enum DocumentCode {
     PZ,
     WZ,
     FZ,

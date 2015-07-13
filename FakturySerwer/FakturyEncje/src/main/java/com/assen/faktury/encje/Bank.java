@@ -3,9 +3,6 @@ package com.assen.faktury.encje;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -15,58 +12,47 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "bank")
-public class Bank implements Serializable {
+public class Bank extends BasicEntity implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
-    private int id;
+   
 
-    @Column
+    @Column(name = "bank_name")
 //    @Length(max = 30)
     @Size(max = 30)
-    private String nazwaBanku;
+    private String bankName;
 
     @Column
 //    @Length(max = 5)
     @Size(max = 5)
-    private String waluta;
+    private String currency;
 
     @Column(unique = true)
     @Size(min = 26, max = 26)
-    private String numer;
+    private String number;
 
-    public int getId() {
-        return id;
+    public String getBankName() {
+        return bankName;
     }
 
-    protected void setId(int id) {
-        this.id = id;
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
     }
 
-    public String getNazwaBanku() {
-        return nazwaBanku;
+    public String getCurrency() {
+        return currency;
     }
 
-    public void setNazwaBanku(String nazwaBanku) {
-        this.nazwaBanku = nazwaBanku;
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
-    public String getWaluta() {
-        return waluta;
+    public String getNumber() {
+        return number;
     }
 
-    public void setWaluta(String waluta) {
-        this.waluta = waluta;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
-    public String getNumer() {
-        return numer;
-    }
-
-    public void setNumer(String numer) {
-        this.numer = numer;
-    }
     
-    
-}
+  }
