@@ -52,6 +52,7 @@
         <jee.version>7.0</jee.version>
         <cglib.version>3.1</cglib.version>
         <postgres.version>9.1-901.jdbc4</postgres.version>
+        <weld.se.version>2.1.0.Final</weld.se.version>
     </properties>
   
     <dependencyManagement>
@@ -63,6 +64,12 @@
                 <artifactId>cdi-api</artifactId>
                 <version>${cdi.version}</version>
                 <scope>provided</scope>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.jboss.weld.se</groupId>
+                <artifactId>weld-se</artifactId>
+                <version>${weld.se.version}</version>
             </dependency>
         
             <!--Slf4j-->
