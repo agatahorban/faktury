@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+    <persistence-unit name="invoicesDatabase" transaction-type="JTA">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <jta-data-source>jdbc/assenFakturyDB</jta-data-source>
+        <class>com.assen.invoices.entities.Address</class>
+        <class>com.assen.invoices.entities.Bank</class>
+        <class>com.assen.invoices.entities.CollectivePackage</class>
+        <class>com.assen.invoices.entities.Contractor</class>
+        <class>com.assen.invoices.entities.DeliveryNote</class>
+        <class>com.assen.invoices.entities.DeliveryNoteGoods</class>
+        <class>com.assen.invoices.entities.ExternalIncome</class>
+        <class>com.assen.invoices.entities.ExternalIncomeGoods</class>
+        <class>com.assen.invoices.entities.Goods</class>
+        <class>com.assen.invoices.entities.Group</class>
+        <class>com.assen.invoices.entities.PaymentDate</class>
+        <class>com.assen.invoices.entities.PurchaseInvoice</class>
+        <class>com.assen.invoices.entities.PurchaseInvoiceGoods</class>
+        <class>com.assen.invoices.entities.UnitOfMeasure</class>
+        <class>com.assen.invoices.entities.User</class>
+        <class>com.assen.invoices.entities.VATInvoice</class>
+        <class>com.assen.invoices.entities.VATInvoiceGoods</class>
+        <class>com.assen.invoices.entities.VATRate</class>
+        <class>com.assen.invoices.entities.Warehouse</class>
+        <class>com.assen.invoices.entities.WarehouseGoods</class>
+        <shared-cache-mode>NONE</shared-cache-mode>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
+            <property name="hibernate.temp.use_jdbc_metadata_defaults" value="false"/>
+            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
+        </properties>
+    </persistence-unit>
+</persistence>
