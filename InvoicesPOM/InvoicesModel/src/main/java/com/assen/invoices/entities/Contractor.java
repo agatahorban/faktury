@@ -3,13 +3,14 @@ package com.assen.invoices.entities;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -17,38 +18,49 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "contractor")
+@XmlRootElement(name = "contractor")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Contractor extends BasicEntity implements Serializable {
 
     @Column(name = "is_addressee")
+    @XmlElement
     private boolean addressee;
 
     @Column(name = "is_supplier")
+    @XmlElement
     private boolean supplier;
 
     @Column(name = "is_vat_payer")
+    @XmlElement
     private boolean VATpayer;
 
     @Column(name = "cut_name")
     @Size(max = 30)
+    @XmlElement
     private String cutName;
 
     @Column(name = "full_name")
+    @XmlElement
     private String fullName;
 
     @Column(name = "nip")
     @Size(min = 10, max = 13)
+    @XmlElement
     private String NIP;
 
     @ManyToOne
     @JoinColumn(name = "address_id")
+    @XmlElement
     private Address address;
 
     @ManyToOne
     @JoinColumn(name = "bank_id")
+    @XmlElement
     private Bank bank;
 
     @ManyToOne
     @JoinColumn(name = "payment_date_id")
+    @XmlElement
     private PaymentDate paymentDate;
 
     public boolean isAddressee() {

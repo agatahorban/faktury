@@ -11,9 +11,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -21,6 +18,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -28,36 +29,46 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "delivery_note")
+@XmlRootElement(name = "deliveryNote")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class DeliveryNote extends BasicEntity implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "document_code")
+    @XmlElement
     private DocumentCode documentCode;
 
     @Column
     @Size(max = 20)
+    @XmlElement
     private String mask;
 
     @Column
+    @XmlElement
     private int number;
 
     @Column
     @Size(max = 10)
+    @XmlElement
     private String concurrency;
 
     @Column(name = "date_of_issue")
     @Temporal(TemporalType.DATE)
+    @XmlElement
     private Date dateOfIssue;
 
     @ManyToOne
     @JoinColumn(name = "addressee_id")
+    @XmlElement
     private Contractor addressee;
 
     @ManyToOne
     @JoinColumn(name = "vendor_id")
+    @XmlElement
     private User vendor;
     
     @OneToMany(mappedBy = "deliveryNote", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @XmlElement
     private List<DeliveryNoteGoods> listOfGoods;
     
     public DeliveryNote() {

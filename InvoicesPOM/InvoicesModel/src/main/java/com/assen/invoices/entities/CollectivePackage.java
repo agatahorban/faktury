@@ -3,11 +3,12 @@ package com.assen.invoices.entities;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -15,28 +16,37 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "collective_package")
+@XmlRootElement(name = "collectivePackage")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class CollectivePackage extends BasicEntity implements Serializable {
 
     @Column(name = "cut_name")
     @Size(max = 10)
+    @XmlElement
     private String cutName;
 
     @Column(name = "full_name")
+    @XmlElement
     private String fullName;
 
     @Column
+    @XmlElement
     private int capacity;
 
     @Column
+    @XmlElement
     private double weight;
 
     @Column
+    @XmlElement
     private double width;
 
     @Column
+    @XmlElement
     private double height;
 
     @Column
+    @XmlElement
     private double depth;
 
     public String getCutName() {
