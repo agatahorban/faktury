@@ -10,6 +10,10 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -17,13 +21,17 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "warehouse")
+@XmlRootElement(name = "warehouse")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Warehouse extends BasicEntity implements Serializable {
     
     @Column(name = "name")
     @Size(max = 25)
+    @XmlElement
     private String name;
     
     @OneToMany(mappedBy = "warehouse", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @XmlElement
     private List<WarehouseGoods> warehouseGoods;
     
     public Warehouse() {

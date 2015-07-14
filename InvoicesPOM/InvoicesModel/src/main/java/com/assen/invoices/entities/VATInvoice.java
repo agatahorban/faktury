@@ -18,6 +18,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -25,39 +29,50 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "vat_invoice")
+@XmlRootElement(name = "VATInvoice")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class VATInvoice extends BasicEntity implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "document_code")
+    @XmlElement
     private DocumentCode documentCode;
 
     @Column
     @Size(max = 20)
+    @XmlElement
     private String mask;
 
     @Column
+    @XmlElement
     private int number;
 
     @Column(name = "date_of_issue")
     @Temporal(TemporalType.DATE)
+    @XmlElement
     private Date dataWystawienia;
 
     @Column(name = "date_of_payment")
     @Temporal(TemporalType.DATE)
+    @XmlElement
     private Date dateOfPayment;
 
     @Column
+    @XmlElement
     private String signature;
 
     @ManyToOne
     @JoinColumn(name = "addressee_id")
+    @XmlElement
     private Contractor addresse;
 
     @ManyToOne
     @JoinColumn(name = "vendor_id")
+    @XmlElement
     private User vendor;
     
     @OneToMany(mappedBy = "VATInvoice", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @XmlElement
     private List<VATInvoiceGoods> listOfGoods;
     
     public VATInvoice() {

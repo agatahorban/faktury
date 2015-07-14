@@ -18,6 +18,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -25,39 +29,50 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "purchase_invoice")
+@XmlRootElement(name = "purchaseInvoice")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class PurchaseInvoice extends BasicEntity implements Serializable {
 
 
     @Enumerated(EnumType.STRING)
     @Column(name = "document_code")
+    @XmlElement
     private DocumentCode documentCode;
 
     @Column
     @Size(max = 20)
+    @XmlElement
     private String mask;
 
     @Column
+    @XmlElement
     private int number;
 
     @Column(name = "date_of_issue")
     @Temporal(TemporalType.DATE)
+    @XmlElement
     private Date dateOfIssue;
 
     @Column
+    @XmlElement
     private String signature;
 
     @Column(name = "vat_invoice_of_supplier_number")
+    @XmlElement
     private int VATInvoiceOfSupplierNumber;
 
     @ManyToOne
+    @XmlElement
     @JoinColumn(name = "supplier_id")
     private Contractor supplier;
 
     @ManyToOne
+    @XmlElement
     @JoinColumn(name = "addressee_id")
     private User addressee;
     
     @OneToMany(mappedBy = "purchaseInvoice", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @XmlElement
     private List<PurchaseInvoiceGoods> listOfGoods;
     
     public PurchaseInvoice() {
