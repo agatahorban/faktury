@@ -57,7 +57,7 @@ public class DeliveryNote extends BasicEntity implements Serializable {
     @JoinColumn(name = "vendor_id")
     private User vendor;
     
-    @OneToMany(mappedBy = "wydanieZewnetrzne", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "deliveryNote", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<DeliveryNoteGoods> listOfGoods;
     
     public DeliveryNote() {

@@ -13,7 +13,7 @@ import javax.persistence.Table;
  * @author Agata
  */
 @Entity
-@Table(name = "group")
+@Table(name = "group_")
 public class Group extends BasicEntity implements Serializable {
     
     
