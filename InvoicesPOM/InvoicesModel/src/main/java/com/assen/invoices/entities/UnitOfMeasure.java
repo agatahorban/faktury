@@ -5,6 +5,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -12,13 +16,17 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "unit_of_measure")
+@XmlRootElement(name = "unitOfMeasure")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class UnitOfMeasure extends BasicEntity implements Serializable {
     
     @Column (unique = true)
+    @XmlElement
     private String shortcut;
     
     @Column
     @Size(max = 50)
+    @XmlElement
     private String name;
 
     public String getShortcut() {
