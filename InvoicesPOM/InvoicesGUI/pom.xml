@@ -131,5 +131,10 @@
             <groupId>org.jboss.weld.se</groupId>
             <artifactId>weld-se</artifactId>
         </dependency>
+        
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-client</artifactId>
+        </dependency>
     </dependencies>
 </project>
