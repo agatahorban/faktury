@@ -15,6 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -27,20 +28,22 @@ import javax.ws.rs.core.MediaType;
  * @author Arek
  */
 public class LoginController implements Initializable {
-    
+
     @FXML
     private TextField loginTF;
     @FXML
     private PasswordField passwordPF;
-    
+    @FXML
+    private Label errors;
+
     @Inject
     private FXMLLoader mainLoader;
-    
+
     private Parent mainRoot;
     private Stage mainStage;
     private Scene mainScene;
     private MainController mainController;
-    
+
     private Stage stage;
 
     public Stage getStage() {
@@ -50,44 +53,47 @@ public class LoginController implements Initializable {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-    
+
     @FXML
     private void logIn() {
-        //TODO login with REST
         Client client = RestUtil.getClient();
-        
+
         WebResource webResource = client.resource(RestUtil.URL + "login");
-        
+
         LoginCredentialsDto loginCredentialsDto = new LoginCredentialsDto();
         loginCredentialsDto.setLogin(loginTF.getText());
         loginCredentialsDto.setPassword(passwordPF.getText());
-        
+
         ClientResponse response = webResource.accept(MediaType.APPLICATION_XML).post(ClientResponse.class, loginCredentialsDto);
-        
-        User user = response.getEntity(User.class);
-        
-        System.out.println(user.getLogin());
-        System.out.println(user.getPassword());
-        
-        mainStage.show();
-        stage.close();
+
+        if (response.getClientResponseStatus().equals(ClientResponse.Status.INTERNAL_SERVER_ERROR)) {
+            errors.setText("Podane dane są niewłaściwe. Spróbuj jeszcze raz.");
+        } else {
+            User user = response.getEntity(User.class);
+
+            System.out.println(user.getLogin());
+            System.out.println(user.getPassword());
+
+            mainStage.show();
+            stage.close();
+        }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initMainWindow();
-    }    
-    
+    }
+
     private void initMainWindow() {
         try (InputStream mainFXML = getClass().getResourceAsStream("/fxml/Main.fxml")) {
             mainRoot = mainLoader.load(mainFXML);
-            
+
             mainStage = new Stage();
             mainStage.setTitle("Faktury");
-            
+
             mainScene = new Scene(mainRoot);
             mainStage.setScene(mainScene);
-            
+
             mainController = mainLoader.getController();
             mainController.setStage(mainStage);
         } catch (IOException ex) {
