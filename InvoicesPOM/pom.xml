@@ -53,6 +53,8 @@
         <cglib.version>3.1</cglib.version>
         <postgres.version>9.1-901.jdbc4</postgres.version>
         <weld.se.version>2.1.0.Final</weld.se.version>
+        <jersey.version>1.18.1</jersey.version>
+        <jersey.client.version>1.8</jersey.client.version>
     </properties>
   
     <dependencyManagement>
@@ -156,6 +158,19 @@
                 <groupId>postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>${postgres.version}</version>
+            </dependency>
+            
+            <!--REST-API-->
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-servlet</artifactId>
+                <version>${jersey.version}</version>
+                <scope>runtime</scope>  
+            </dependency>
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-client</artifactId>
+                <version>${jersey.client.version}</version>
             </dependency>
             
         </dependencies>

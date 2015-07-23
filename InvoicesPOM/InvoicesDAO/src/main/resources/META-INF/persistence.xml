@@ -24,7 +24,6 @@
         <class>com.assen.invoices.entities.Warehouse</class>
         <class>com.assen.invoices.entities.WarehouseGoods</class>
         <shared-cache-mode>NONE</shared-cache-mode>
-        <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
             <property name="hibernate.hbm2ddl.auto" value="create"/>

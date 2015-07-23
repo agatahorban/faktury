@@ -3,12 +3,13 @@ package com.assen.invoices.entities;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -16,41 +17,53 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "goods")
+@XmlRootElement(name = "goods")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Goods extends BasicEntity implements Serializable {
 
     @Column
+    @XmlElement
     private String index1;
 
     @Column
+    @XmlElement
     private String index2;
 
     @Column(name = "is_price_higher")
+    @XmlElement
     private boolean priceHigher;
 
     @Column
+    @XmlElement
     private double price;
 
     @ManyToOne
     @JoinColumn(name = "group_id")
+    @XmlElement
     private Group group;
 
     @ManyToOne
     @JoinColumn(name = "collective_package_id")
+    @XmlElement
     private CollectivePackage collectivePackage;
 
     @ManyToOne
     @JoinColumn(name = "vat_rate_id")
+    @XmlElement
     private VATRate rate;
 
     @ManyToOne
     @JoinColumn(name = "unit_of_measure_id")
+    @XmlElement
     private UnitOfMeasure unit;
     
     @ManyToOne
     @JoinColumn(name = "supplier_id")
+    @XmlElement
     private Contractor supplier;
     
     @Column
+    @XmlElement
     private int quantity;
 
     public String getIndex1() {

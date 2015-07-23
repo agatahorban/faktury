@@ -1,4 +1,4 @@
-package com.assen.invoices.dao.api;
+package com.assen.invoices.service.api;
 
 import com.assen.invoices.dto.LoginCredentialsDto;
 import com.assen.invoices.entities.User;
@@ -9,7 +9,7 @@ import javax.ejb.Local;
  * @author Arek
  */
 @Local
-public interface IUserDao extends ICrudDao<User> {
+public interface ILoginService {
 
-    User findByLoginAndPassword(LoginCredentialsDto userData);
+    User findUserByLoginAndPassword(LoginCredentialsDto userData);
 }

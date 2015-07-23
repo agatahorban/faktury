@@ -1,5 +1,6 @@
 package com.assen.invoices.gui;
 
+import com.assen.invoices.gui.controllers.LoginController;
 import com.assen.invoices.gui.controllers.MainController;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,13 +21,13 @@ public class FxMain {
     private FXMLLoader loader;
 
     public void start(Stage stage, Parameters parameters) throws IOException {
-        try (InputStream fxml = getClass().getResourceAsStream("/fxml/Main.fxml")) {
+        try (InputStream fxml = getClass().getResourceAsStream("/fxml/Login.fxml")) {
             Parent root = (Parent) loader.load(fxml);
             stage.setScene(new Scene(root));
-            stage.setTitle("Invoices");
+            stage.setTitle("Login");
             
-            MainController mainController = loader.getController();
-            mainController.setStage(stage);
+            LoginController loginController = loader.getController();
+            loginController.setStage(stage);
             
             stage.show();
         } 
