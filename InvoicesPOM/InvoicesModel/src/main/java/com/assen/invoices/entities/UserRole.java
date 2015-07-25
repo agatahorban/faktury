@@ -28,9 +28,13 @@ public class UserRole extends BasicEntity implements Serializable{
     @XmlElement
     private String username;
     
-    @Column
+    @Column(name = "role_")
     @XmlElement
     private String role;
+    
+    protected UserRole(){
+        
+    }
 
     public UserRole(User user, Role role) {
         this.username = user.getLogin();

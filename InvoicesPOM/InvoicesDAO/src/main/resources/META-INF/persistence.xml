@@ -23,10 +23,12 @@
         <class>com.assen.invoices.entities.VATRate</class>
         <class>com.assen.invoices.entities.Warehouse</class>
         <class>com.assen.invoices.entities.WarehouseGoods</class>
+        <class>com.assen.invoices.entities.Role</class>
+        <class>com.assen.invoices.entities.UserRole</class>
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
-            <property name="hibernate.hbm2ddl.auto" value="create"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.temp.use_jdbc_metadata_defaults" value="false"/>
             <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>

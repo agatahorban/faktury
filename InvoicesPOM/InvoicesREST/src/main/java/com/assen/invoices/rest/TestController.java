@@ -1,5 +1,6 @@
 package com.assen.invoices.rest;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -14,6 +15,7 @@ import javax.ws.rs.core.Response;
  */
 @Path("/test")
 @Stateless
+@RolesAllowed("ADMIN")
 public class TestController {
     
     @GET
