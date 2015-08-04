@@ -14,6 +14,13 @@ This project is for creating a business desktop aplication using JavaEE and Java
 The project uses Glassfish 4.1 as an application server and PostgreSQL as a database vendor.
 
 #### Configuration ####
+
+##### JDK configuration #####
+To successfully compile source code at least jdk 1.8u40 is required.
+
+##### Database configuration #####
+Create a new role in PostgreSQL(name, password). Then create a new database called FakturyDB and grant all options to new role.
+
 ##### Glassfish configuration: #####
 1. Copy postgresql-x.x-xxx.jdbc jar file into domain */lib* folder.
 	* located in glassfish installation folder under *domains/domain1*
@@ -35,30 +42,28 @@ The project uses Glassfish 4.1 as an application server and PostgreSQL as a data
 		* Pool Name: *FakturyPool*
 	5. Click ok and finish
 
-##### Database configuration #####
-Create a new role in PostgreSQL(name, password). Then create a new database called FakturyDB and grant all options to new role.
+##### Security configuration #####
+1. go to server config → security
+2. Check Default Principal To Role Mapping Enabled
+3. Go to server-config → security → realms → new
+4. Set name and class name:
+	* name: *invoicesRealm*
+	* class name: *JDBCRealm*
+5. Configure other properties as following:
+	* JAAS Context: *jdbcRealm*
+	* JNDI: *jdbc/assenFakturyDB*
+	* User table: *invoices_user*
+	* User Name Column: *login*
+	* Password column: *pass*
+	* Group table: *user_role*
+	* Group table user name column: *username*
+	* Group name column: *role_*
+	* Password Encryption Algorithm: *SHA-256*
+	* Encoding: *Hex*
+	* Charset: *UTF-8*
 
 #### How to run tests ####
 Tests run using Arquillian and remote glassfish server. To run tests you need to start your server first. 
 
 #### Writing tests ####
 Test should use Arquillian and by deployed to remote glassfish server for an EJB beans.
-
-#### Security ####
-1. go to server config → security
-2. Check Default Principal To Role Mapping Enabled
-3. Go to server-config → security → realms → new
-4. name = invoicesRealm
- class name : JDBCRealm
-5. 
-JAAS Context : jdbcRealm
-JNDI: jdbc/assenFakturyDB
-User table: invoices_user
-User Name Column: login
-Password column: pass
-Group table: user_role
-Group table user name column: username
-Group name column: role_
-Password Encryption Algorithm – SHA-256
-Encoding : Hex
-Charset: UTF-8
