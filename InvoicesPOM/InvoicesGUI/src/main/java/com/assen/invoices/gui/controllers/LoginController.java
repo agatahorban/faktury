@@ -2,7 +2,9 @@ package com.assen.invoices.gui.controllers;
 
 import com.assen.invoices.dto.LoginCredentialsDto;
 import com.assen.invoices.entities.User;
-import com.assen.invoices.view.utils.RestUtil;
+import com.assen.invoices.gui.session.LoggedUser;
+import com.assen.invoices.gui.utils.RestUtil;
+import com.assen.invoices.gui.utils.ShaUtil;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -21,6 +23,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * FXML Controller class
@@ -28,6 +32,8 @@ import javax.ws.rs.core.MediaType;
  * @author Arek
  */
 public class LoginController implements Initializable {
+    
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
 
     @FXML
     private TextField loginTF;
@@ -35,6 +41,9 @@ public class LoginController implements Initializable {
     private PasswordField passwordPF;
     @FXML
     private Label errors;
+    
+    @Inject
+    private LoggedUser loggedUser;
 
     @Inject
     private FXMLLoader mainLoader;
@@ -56,23 +65,27 @@ public class LoginController implements Initializable {
 
     @FXML
     private void logIn() {
-        Client client = RestUtil.getClient();
-
+        Client client = RestUtil.getUnauthorizedClient();
+        
         WebResource webResource = client.resource(RestUtil.URL + "login");
 
         LoginCredentialsDto loginCredentialsDto = new LoginCredentialsDto();
         loginCredentialsDto.setLogin(loginTF.getText());
-        loginCredentialsDto.setPassword(passwordPF.getText());
+        loginCredentialsDto.setPassword(ShaUtil.sha256(passwordPF.getText()));
 
         ClientResponse response = webResource.accept(MediaType.APPLICATION_XML).post(ClientResponse.class, loginCredentialsDto);
 
         if (response.getClientResponseStatus().equals(ClientResponse.Status.INTERNAL_SERVER_ERROR)) {
+            logger.warn("Wrong credentials for user: " + loginTF.getText());
             errors.setText("Podane dane są niewłaściwe. Spróbuj jeszcze raz.");
+            loginTF.setText("");
+            passwordPF.setText("");
         } else {
+            logger.info("Successfully logged user: " + loginTF.getText());
             User user = response.getEntity(User.class);
 
-            System.out.println(user.getLogin());
-            System.out.println(user.getPassword());
+            loggedUser.setDbUser(user);
+            loggedUser.setPassword(passwordPF.getText());
 
             mainStage.show();
             stage.close();
@@ -93,11 +106,15 @@ public class LoginController implements Initializable {
 
             mainScene = new Scene(mainRoot);
             mainStage.setScene(mainScene);
+            
+            //Maximizing window
+            mainStage.setMaximized(true);
 
             mainController = mainLoader.getController();
             mainController.setStage(mainStage);
         } catch (IOException ex) {
-            //TODO implement slf4j
+            logger.error("Error reading Main.fxml file.");
+            logger.error(ex.getMessage());
         }
     }
 }

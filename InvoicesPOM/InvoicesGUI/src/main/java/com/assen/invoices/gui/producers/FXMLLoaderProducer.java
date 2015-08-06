@@ -1,4 +1,4 @@
-package com.assen.invoices.producres;
+package com.assen.invoices.gui.producers;
 
 import java.nio.charset.StandardCharsets;
 import javafx.fxml.FXMLLoader;

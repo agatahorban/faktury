@@ -3,6 +3,7 @@ package com.assen.invoices.rest;
 import com.assen.invoices.dto.LoginCredentialsDto;
 import com.assen.invoices.entities.User;
 import com.assen.invoices.service.api.ILoginService;
+import javax.annotation.security.PermitAll;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
@@ -18,6 +19,7 @@ import javax.ws.rs.core.Response;
  */
 @Stateless
 @Path("/login")
+@PermitAll
 public class LoginController {
     
     @EJB
