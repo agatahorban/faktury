@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+    
+    <appender name="AppFileLogger" class="org.apache.log4j.FileAppender">
+        <param name="file" value="${com.sun.aas.instanceRoot}/logs/invoices_logs/invoicesREST.log" />
+        <param name="append" value="false" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%-5p %d{dd MMM yyyy HH:mm:ss} %c{1} - %m%n" />
+        </layout>
+    </appender>
+    
+    <appender name="BaseFileLogger" class="org.apache.log4j.FileAppender">
+        <param name="file" value="${com.sun.aas.instanceRoot}/logs/invoices_logs/invoicesWEB_ROOT.log" />
+        <param name="append" value="false" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%-5p %d{dd MMM yyyy HH:mm:ss} %c{1} - %m%n" />
+        </layout>
+    </appender>
+    
+    <appender name="ConsoleLogger" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%-5p %d{dd MMM yyyy HH:mm:ss} %c{1} - %m%n" />
+        </layout>
+    </appender>
+    
+    <logger name="com.assen">
+        <level value="debug" />
+        <appender-ref ref="AppFileLogger" />
+        <appender-ref ref="ConsoleLogger" />
+    </logger>
+    
+    <root>
+        <priority value="info" />
+        <appender-ref ref="BaseFileLogger" />
+    </root>
+    
+</log4j:configuration>
