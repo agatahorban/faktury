@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="654.0" prefWidth="856.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox>
+         <children>
+            <HBox VBox.vgrow="NEVER">
+               <children>
+                  <GridPane prefHeight="30.0" prefWidth="523.0" HBox.hgrow="ALWAYS">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <StackPane prefHeight="150.0" prefWidth="200.0" GridPane.columnIndex="1">
+                           <children>
+                              <TextField alignment="BOTTOM_LEFT" />
+                           </children>
+                        </StackPane>
+                        <Label alignment="BOTTOM_RIGHT" prefHeight="17.0" prefWidth="153.0" text="Wyszukaj kontakt:">
+                           <GridPane.margin>
+                              <Insets left="20.0" />
+                           </GridPane.margin>
+                        </Label>
+                     </children>
+                     <HBox.margin>
+                        <Insets bottom="20.0" />
+                     </HBox.margin>
+                  </GridPane>
+               </children>
+            </HBox>
+            <TableView prefHeight="439.0" prefWidth="713.0" VBox.vgrow="ALWAYS">
+              <columns>
+                <TableColumn prefWidth="200.0" text="Nazwa skrócona" />
+                <TableColumn prefWidth="150.0" text="Nip" />
+                  <TableColumn prefWidth="150.0" text="Miejscowość" />
+                  <TableColumn prefWidth="100.0" text="Kod" />
+                  <TableColumn minWidth="7.0" prefWidth="220.0" text="Ulica" />
+                  <TableColumn minWidth="100.0" prefWidth="161.0" text="Dom" />
+                  <TableColumn minWidth="100.0" prefWidth="118.0" text="Kod pocztowy" />
+              </columns>
+            </TableView>
+            <StackPane prefHeight="150.0" prefWidth="200.0">
+               <children>
+                  <HBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Button alignment="CENTER_RIGHT" mnemonicParsing="false" text="Usuń">
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" text="Edytuj">
+                           <HBox.margin>
+                              <Insets left="10.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                        <Button mnemonicParsing="false" text="Dodaj">
+                           <HBox.margin>
+                              <Insets left="10.0" top="5.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+            </StackPane>
+         </children>
+      </VBox>
+   </children>
+   <padding>
+      <Insets bottom="30.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</StackPane>
