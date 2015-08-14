@@ -50,7 +50,7 @@ public class VATInvoice extends BasicEntity implements Serializable {
     @Column(name = "date_of_issue")
     @Temporal(TemporalType.DATE)
     @XmlElement
-    private Date dataWystawienia;
+    private Date dateOfIssue;
 
     @Column(name = "date_of_payment")
     @Temporal(TemporalType.DATE)
@@ -103,12 +103,12 @@ public class VATInvoice extends BasicEntity implements Serializable {
         this.number = number;
     }
 
-    public Date getDataWystawienia() {
-        return dataWystawienia;
+    public Date getDateOfIssue() {
+        return dateOfIssue;
     }
 
-    public void setDataWystawienia(Date dataWystawienia) {
-        this.dataWystawienia = dataWystawienia;
+    public void setDateOfIssue(Date dateOfIssue) {
+        this.dateOfIssue = dateOfIssue;
     }
 
     public Date getDateOfPayment() {

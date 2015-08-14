@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.assen.invoices.view.utils;
+package com.assen.invoices.gui.utils;
 
 import java.security.MessageDigest;
 

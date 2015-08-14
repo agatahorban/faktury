@@ -50,7 +50,7 @@ public class DeliveryNote extends BasicEntity implements Serializable {
     @Column
     @Size(max = 10)
     @XmlElement
-    private String concurrency;
+    private String currency;
 
     @Column(name = "date_of_issue")
     @Temporal(TemporalType.DATE)
@@ -99,12 +99,12 @@ public class DeliveryNote extends BasicEntity implements Serializable {
         this.number = number;
     }
 
-    public String getConcurrency() {
-        return concurrency;
+    public String getCurrency() {
+        return currency;
     }
 
-    public void setConcurrency(String concurrency) {
-        this.concurrency = concurrency;
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     public Date getDateOfIssue() {

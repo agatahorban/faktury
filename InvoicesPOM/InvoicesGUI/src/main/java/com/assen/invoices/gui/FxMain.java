@@ -1,7 +1,6 @@
 package com.assen.invoices.gui;
 
 import com.assen.invoices.gui.controllers.LoginController;
-import com.assen.invoices.gui.controllers.MainController;
 import java.io.IOException;
 import java.io.InputStream;
 import javafx.application.Application.Parameters;
