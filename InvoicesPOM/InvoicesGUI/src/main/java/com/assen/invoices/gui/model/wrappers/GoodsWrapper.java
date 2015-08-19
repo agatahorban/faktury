@@ -20,6 +20,7 @@ public class GoodsWrapper {
     
     private StringProperty index1;
     private StringProperty index2;
+    private StringProperty name;
     private BooleanProperty priceHigher;
     private DoubleProperty price;
     private GroupWrapper groupWrapper;
@@ -58,6 +59,14 @@ public class GoodsWrapper {
 
     public void setIndex2(String index2) {
         this.index2.set(index2);
+    }
+    
+    public String getName() {
+        return name.get();
+    }
+
+    public void setName(String name) {
+        this.name.set(name);
     }
 
     public Boolean isPriceHigher() {
@@ -132,6 +141,10 @@ public class GoodsWrapper {
         return index2;
     }
     
+    public StringProperty nameProperty() {
+        return name;
+    }
+    
     public BooleanProperty priceHigherProperty() {
         return priceHigher;
     }
@@ -155,6 +168,7 @@ public class GoodsWrapper {
         supplierWrapper = new ContractorWrapper(goods.getSupplier());
         quantity = new SimpleIntegerProperty(goods.getQuantity());
         unitOfMeasureWrapper = new UnitOfMeasureWrapper(goods.getUnit());
+        name =  new SimpleStringProperty(goods.getName());
     }
     
     private void getWrapperValues() {
@@ -168,5 +182,6 @@ public class GoodsWrapper {
         goods.setRate(getVatRateWrapper().getVatRate());
         goods.setSupplier(getSupplierWrapper().getContractor());
         goods.setUnit(getUnitOfMeasureWrapper().getUnitOfMeasure());
+        goods.setName(getName());
     }    
 }
