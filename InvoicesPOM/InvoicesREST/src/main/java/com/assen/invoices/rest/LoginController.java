@@ -42,4 +42,6 @@ public class LoginController {
         logger.info("Successfully logging user: " + userData.getLogin());
         return Response.ok().entity(user).build();
     }
+    
+    
 }

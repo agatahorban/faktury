@@ -10,3 +10,8 @@
 # Netbeans files #
 **/nb-configuration.xml
 **/nbactions.xml
+/InvoicesPOM/InvoicesModel/target/
+/InvoicesPOM/InvoicesDAO/target/
+/InvoicesPOM/InvoicesGUI/target/
+/InvoicesPOM/InvoicesService/target/
+/InvoicesPOM/InvoicesREST/target/
