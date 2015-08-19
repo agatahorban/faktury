@@ -28,6 +28,10 @@ public class Goods extends BasicEntity implements Serializable {
     @Column
     @XmlElement
     private String index2;
+    
+    @Column(length = 100)
+    @XmlElement
+    private String name;
 
     @Column(name = "is_price_higher")
     @XmlElement
@@ -82,6 +86,14 @@ public class Goods extends BasicEntity implements Serializable {
         this.index2 = index2;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
     public boolean isPriceHigher() {
         return priceHigher;
     }
