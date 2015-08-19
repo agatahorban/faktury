@@ -20,6 +20,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
@@ -89,6 +91,12 @@ public class LoginController implements Initializable {
 
             mainStage.show();
             stage.close();
+        }
+    }
+    
+    public void performLogin(KeyEvent event) {
+        if(event.getCode().equals(KeyCode.ENTER)) {
+            logIn();
         }
     }
 

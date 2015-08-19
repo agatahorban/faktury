@@ -16,4 +16,8 @@
       <role-name>USER</role-name>
       <group-name>USER</group-name>
   </security-role-mapping>
+  <security-role-mapping>
+      <role-name>PERM_GOODS</role-name>
+      <group-name>PERM_GOODS</group-name>
+  </security-role-mapping>
 </glassfish-web-app>

@@ -61,4 +61,8 @@
         <description>Basic user</description>
         <role-name>USER</role-name>
     </security-role>
+    <security-role>
+        <description>Permission allowing to access Goods</description>
+        <role-name>PERM_GOODS</role-name>
+    </security-role>
 </web-app>
