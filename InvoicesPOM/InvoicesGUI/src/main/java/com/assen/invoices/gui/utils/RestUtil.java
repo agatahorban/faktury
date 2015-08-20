@@ -2,8 +2,11 @@ package com.assen.invoices.gui.utils;
 
 import com.assen.invoices.gui.session.LoggedUser;
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 import javax.inject.Inject;
+import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,5 +34,20 @@ public class RestUtil {
         client.addFilter(new HTTPBasicAuthFilter(loggedUser.getDbUser().getLogin(),
                 loggedUser.getPassword()));
         return client;
+    }
+    
+    public static boolean responseHasErrors(ClientResponse response) {
+        return response.getClientResponseStatus().equals(ClientResponse.Status.INTERNAL_SERVER_ERROR)
+                || response.getClientResponseStatus().equals(ClientResponse.Status.UNAUTHORIZED);
+    }
+    
+    public static ClientResponse generateRestGetResponse(Client client, String restUrl) {
+        WebResource webResource = client.resource(URL + restUrl);
+        return webResource.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
+    }
+    
+    public static ClientResponse generateRestPostResponse(Client client, String restUrl, Object data) {
+        WebResource webResource = client.resource(URL + restUrl);
+        return webResource.accept(MediaType.APPLICATION_XML).post(ClientResponse.class, data);
     }
 }

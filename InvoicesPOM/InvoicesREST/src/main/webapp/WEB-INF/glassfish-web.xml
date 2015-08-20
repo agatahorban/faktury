@@ -1,23 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE glassfish-web-app PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Servlet 3.0//EN" "http://glassfish.org/dtds/glassfish-web-app_3_0-1.dtd">
 <glassfish-web-app error-url="">
-  <class-loader delegate="true"/>
-  <jsp-config>
-    <property name="keepgenerated" value="true">
-      <description>Keep a copy of the generated servlet class' java code.</description>
-    </property>
-  </jsp-config>
+    <class-loader delegate="true"/>
+    <jsp-config>
+        <property name="keepgenerated" value="true">
+            <description>Keep a copy of the generated servlet class' java code.</description>
+        </property>
+    </jsp-config>
   
-  <security-role-mapping>
-      <role-name>ADMIN</role-name>
-      <group-name>ADMIN</group-name>
-  </security-role-mapping>
-  <security-role-mapping>
-      <role-name>USER</role-name>
-      <group-name>USER</group-name>
-  </security-role-mapping>
-  <security-role-mapping>
-      <role-name>PERM_CONTR</role-name>
-      <group-name>PERM_CONTR</group-name>
-  </security-role-mapping>
+    <security-role-mapping>
+        <role-name>ADMIN</role-name>
+        <group-name>ADMIN</group-name>
+    </security-role-mapping>
+    <security-role-mapping>
+        <role-name>USER</role-name>
+        <group-name>USER</group-name>
+    </security-role-mapping>
+    <security-role-mapping>
+        <role-name>PERM_CONTR</role-name>
+        <group-name>PERM_CONTR</group-name>
+    </security-role-mapping>
+    <security-role-mapping>
+        <role-name>PERM_GOODS</role-name>
+        <group-name>PERM_GOODS</group-name>
+    </security-role-mapping>
+    <security-role-mapping>
+        <role-name>PERM_COLLECTIVE_PACKAGE</role-name>
+        <group-name>PERM_COLLECTIVE_PACKAGE</group-name>
+    </security-role-mapping>
+    <security-role-mapping>
+        <role-name>PERM_GROUP</role-name>
+        <group-name>PERM_GROUP</group-name>
+    </security-role-mapping>
+    <security-role-mapping>
+        <role-name>PERM_VAT_RATE</role-name>
+        <group-name>PERM_VAT_RATE</group-name>
+    </security-role-mapping>
+    <security-role-mapping>
+        <role-name>PERM_UNITS_MEAS</role-name>
+        <group-name>PERM_UNITS_MEAS</group-name>
+    </security-role-mapping>
 </glassfish-web-app>

@@ -22,10 +22,13 @@ public class FxMain {
     public void start(Stage stage, Parameters parameters) throws IOException {
         try (InputStream fxml = getClass().getResourceAsStream("/fxml/Login.fxml")) {
             Parent root = (Parent) loader.load(fxml);
-            stage.setScene(new Scene(root));
+            LoginController loginController = loader.getController();
+            
+            Scene scene = new Scene(root);
+            scene.setOnKeyPressed(keyEvent -> loginController.performLogin(keyEvent));
+            stage.setScene(scene);
             stage.setTitle("Login");
             
-            LoginController loginController = loader.getController();
             loginController.setStage(stage);
             
             stage.show();
