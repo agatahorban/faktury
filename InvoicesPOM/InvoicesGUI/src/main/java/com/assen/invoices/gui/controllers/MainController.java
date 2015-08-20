@@ -12,8 +12,10 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 /**
  *
@@ -37,6 +39,13 @@ public class MainController implements Initializable {
 
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
+    private FXMLLoader goodsLoader;
+    private Parent goodsRoot;
+    private Scene goodsScene;
+    private Stage goodsStage;
+    private GoodsController goodsController;
+
+
     public Stage getStage() {
         return stage;
     }
@@ -48,6 +57,7 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initContractorsWindow();
+		initGoodsWindow();
     }
 
     private void initContractorsWindow() {
@@ -73,6 +83,33 @@ public class MainController implements Initializable {
         contractorController.generateData();
         currentContentSP.getChildren().add(contractorRoot);
         
+    }
+    
+
+    private void initGoodsWindow() {
+        try (InputStream goodsFXML = getClass().getResourceAsStream("/fxml/Goods.fxml")) {
+            goodsRoot = goodsLoader.load(goodsFXML);
+
+            goodsStage = new Stage();
+            goodsStage.setTitle("Faktury");
+
+            goodsScene = new Scene(goodsRoot);
+            goodsStage.setScene(goodsScene);
+
+            goodsController = goodsLoader.getController();
+            goodsController.setStage(stage);
+        } catch (IOException ex) {
+//            logger.error("Error reading Goods.fxml file.");
+//            logger.error(ex.getMessage());
+        }
+
+    }
+
+    @FXML
+    private void showGoodsScene() {
+        goodsController.populateData();
+        currentContentSP.getChildren().clear();
+        currentContentSP.getChildren().add(goodsRoot);
     }
 
 }

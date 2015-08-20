@@ -12,14 +12,6 @@
             <param-name>com.sun.jersey.config.property.packages</param-name>
             <param-value>com.assen.invoices.rest</param-value>
         </init-param>
-<!--        <init-param>
-            <param-name>com.sun.jersey.config.feature.XmlRootElementProcessing</param-name>
-            <param-value>true</param-value>
-        </init-param>
-        <init-param>
-            <param-name>com.sun.jersey.config.property.resourceConfigClass</param-name>
-            <param-value>com.sun.jersey.api.core.PackagesResourceConfig</param-value>
-        </init-param>-->
         <load-on-startup>1</load-on-startup>
     </servlet>
     
@@ -72,5 +64,25 @@
     <security-role>
         <description>Contractors permission</description>
         <role-name>PERM_CONTR</role-name>
+    </security-role>
+    <security-role>
+        <description>Permission allowing to access Goods</description>
+        <role-name>PERM_GOODS</role-name>
+    </security-role>
+    <security-role>
+        <description>Permission allowing to access collective packages</description>
+        <role-name>PERM_COLLECTIVE_PACKAGE</role-name>
+    </security-role>
+    <security-role>
+        <description>Permission allowing to access groups</description>
+        <role-name>PERM_GROUP</role-name>
+    </security-role>
+    <security-role>
+        <description>Permission allowing to access vat rates</description>
+        <role-name>PERM_VAT_RATE</role-name>
+    </security-role>
+    <security-role>
+        <description>Permission allowing to access unit of measures</description>
+        <role-name>PERM_UNITS_MEAS</role-name>
     </security-role>
 </web-app>

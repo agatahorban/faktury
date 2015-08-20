@@ -7,6 +7,9 @@ INSERT INTO user_role( version, role_, username) VALUES (1, 'USER', 'admin');
 INSERT INTO user_role( version, role_, username) VALUES (1, 'ADMIN', 'admin');
 
 INSERT INTO role_( version, name) VALUES (1, 'PERM_GOODS');
+INSERT INTO role_( version, name) VALUES (1, 'PERM_COLLECTIVE_PACKAGE');
+INSERT INTO role_( version, name) VALUES (1, 'PERM_GROUP');
+INSERT INTO role_( version, name) VALUES (1, 'PERM_VAT_RATE');
 
 INSERT INTO group_(version, name) VALUES (1, 'Łódź');
 INSERT INTO collective_package(version, capacity, full_name, cut_name, depth, height, weight, width)
