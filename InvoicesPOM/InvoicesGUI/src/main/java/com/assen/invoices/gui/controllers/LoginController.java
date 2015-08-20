@@ -69,15 +69,17 @@ public class LoginController implements Initializable {
     private void logIn() {
         Client client = RestUtil.getUnauthorizedClient();
         
-        WebResource webResource = client.resource(RestUtil.URL + "login");
+//        WebResource webResource = client.resource(RestUtil.URL + "login");
 
         LoginCredentialsDto loginCredentialsDto = new LoginCredentialsDto();
         loginCredentialsDto.setLogin(loginTF.getText());
         loginCredentialsDto.setPassword(ShaUtil.sha256(passwordPF.getText()));
 
-        ClientResponse response = webResource.accept(MediaType.APPLICATION_XML).post(ClientResponse.class, loginCredentialsDto);
+        ClientResponse response = RestUtil.generateRestPostResponse(client, "login", loginCredentialsDto);
+//                webResource.accept(MediaType.APPLICATION_XML).post(ClientResponse.class, loginCredentialsDto);
 
-        if (response.getClientResponseStatus().equals(ClientResponse.Status.INTERNAL_SERVER_ERROR)) {
+//        if (response.getClientResponseStatus().equals(ClientResponse.Status.INTERNAL_SERVER_ERROR)) {
+        if (RestUtil.responseHasErrors(response)) {
             logger.warn("Wrong credentials for user: " + loginTF.getText());
             errors.setText("Podane dane są niewłaściwe. Spróbuj jeszcze raz.");
             loginTF.setText("");

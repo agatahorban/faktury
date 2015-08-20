@@ -20,4 +20,20 @@
       <role-name>PERM_GOODS</role-name>
       <group-name>PERM_GOODS</group-name>
   </security-role-mapping>
+  <security-role-mapping>
+      <role-name>PERM_COLLECTIVE_PACKAGE</role-name>
+      <group-name>PERM_COLLECTIVE_PACKAGE</group-name>
+  </security-role-mapping>
+  <security-role-mapping>
+      <role-name>PERM_GROUP</role-name>
+      <group-name>PERM_GROUP</group-name>
+  </security-role-mapping>
+  <security-role-mapping>
+      <role-name>PERM_VAT_RATE</role-name>
+      <group-name>PERM_VAT_RATE</group-name>
+  </security-role-mapping>
+  <security-role-mapping>
+      <role-name>PERM_UNITS_MEAS</role-name>
+      <group-name>PERM_UNITS_MEAS</group-name>
+  </security-role-mapping>
 </glassfish-web-app>

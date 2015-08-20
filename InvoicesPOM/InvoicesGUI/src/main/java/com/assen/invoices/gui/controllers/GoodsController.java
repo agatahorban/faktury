@@ -6,7 +6,7 @@ import com.assen.invoices.gui.model.wrappers.GoodsWrapper;
 import com.assen.invoices.gui.utils.RestUtil;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
+//import com.sun.jersey.api.client.WebResource;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -18,7 +18,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javax.inject.Inject;
-import javax.ws.rs.core.MediaType;
+//import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -89,12 +89,12 @@ public class GoodsController implements Initializable {
         GoodsListDto goodsListDto = new GoodsListDto();
         Client client = restUtil.getAuthorizedClient();
         
-        WebResource webResource = client.resource(RestUtil.URL + "goods/all");
+        //WebResource webResource = client.resource(RestUtil.URL + "goods/all");
         
-        ClientResponse response = webResource.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
+        ClientResponse response = RestUtil.generateRestGetResponse(client, "goods/all");
+                //webResource.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
         
-        if(response.getClientResponseStatus().equals(ClientResponse.Status.INTERNAL_SERVER_ERROR)
-                || response.getClientResponseStatus().equals(ClientResponse.Status.UNAUTHORIZED)) {
+        if(RestUtil.responseHasErrors(response)) {
             logger.error("Error getting all goods from database. Error status: " + response.getClientResponseStatus().getStatusCode());
         } else {
             logger.info("Populating all goods from database.");
