@@ -2,20 +2,27 @@ package com.assen.invoices.gui.controllers;
 
 import com.assen.invoices.dto.GoodsListDto;
 import com.assen.invoices.entities.Goods;
+import com.assen.invoices.gui.controllers.add.AddGoodsController;
 import com.assen.invoices.gui.model.wrappers.GoodsWrapper;
 import com.assen.invoices.gui.utils.RestUtil;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
+import java.io.IOException;
+import java.io.InputStream;
 //import com.sun.jersey.api.client.WebResource;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.inject.Inject;
 //import javax.ws.rs.core.MediaType;
@@ -57,10 +64,19 @@ public class GoodsController implements Initializable {
     private RestUtil restUtil;
     
     private Stage stage;
+    
+    @Inject
+    private FXMLLoader addGoodsLoader;
+
+    private Parent addGoodsRoot;
+    private Stage addGoodsStage;
+    private Scene addGoodsScene;
+    private AddGoodsController addGoodsController;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         setBingings();
+        initAddGoodsWindow();
     }
 
     public Stage getStage() {
@@ -69,6 +85,14 @@ public class GoodsController implements Initializable {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+    
+    @FXML
+    private void addNewRecord() {
+        addGoodsController.setIsEdit(false);
+        addGoodsController.populateReferencedData();
+        
+        addGoodsStage.show();
     }
     
     private void setBingings() {
@@ -91,7 +115,7 @@ public class GoodsController implements Initializable {
         
         //WebResource webResource = client.resource(RestUtil.URL + "goods/all");
         
-        ClientResponse response = RestUtil.generateRestGetResponse(client, "goods/all");
+        ClientResponse response = RestUtil.generateRestGet(client, "goods/all");
                 //webResource.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
         
         if(RestUtil.responseHasErrors(response)) {
@@ -109,5 +133,25 @@ public class GoodsController implements Initializable {
         }
         
         goodsTV.setItems(obsGoods);
+    }
+    
+    private void initAddGoodsWindow() {
+        try (InputStream addGoodsFXML = getClass().getResourceAsStream("/fxml/AddGoods.fxml")) {
+            addGoodsRoot = addGoodsLoader.load(addGoodsFXML);
+
+            addGoodsStage = new Stage();
+            addGoodsStage.setTitle("Faktury");
+            addGoodsStage.initOwner(stage);
+            addGoodsStage.initModality(Modality.WINDOW_MODAL);
+
+            addGoodsScene = new Scene(addGoodsRoot);
+            addGoodsStage.setScene(addGoodsScene);
+
+            addGoodsController = addGoodsLoader.getController();
+            addGoodsController.setStage(stage);
+        } catch (IOException ex) {
+            logger.error("Error reading AddGoods.fxml file.");
+            logger.error(ex.getMessage());
+        }
     }
 }

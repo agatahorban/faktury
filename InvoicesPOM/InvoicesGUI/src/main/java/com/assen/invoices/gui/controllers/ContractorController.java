@@ -71,8 +71,9 @@ public class ContractorController implements Initializable {
     public void generateData(){
 
         Client client = restUtil.getAuthorizedClient();
-        WebResource webResource = client.resource(RestUtil.URL + "contractors/all");
-        ClientResponse response = webResource.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
+//        WebResource webResource = client.resource(RestUtil.URL + "contractors/all");
+//        ClientResponse response = webResource.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
+        ClientResponse response = RestUtil.generateRestGet(client, "contractors/all");
         List<Contractor> contractors = response.getEntity(new GenericType<List<Contractor>>() {
         });
         ObservableList<ContractorWrapper> obsContractors = FXCollections.observableArrayList();

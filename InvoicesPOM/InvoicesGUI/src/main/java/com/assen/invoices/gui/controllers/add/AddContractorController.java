@@ -1,4 +1,4 @@
-package com.assen.invoices.gui.controllers;
+package com.assen.invoices.gui.controllers.add;
 
 /*
  * To change this license header, choose License Headers in Project Properties.

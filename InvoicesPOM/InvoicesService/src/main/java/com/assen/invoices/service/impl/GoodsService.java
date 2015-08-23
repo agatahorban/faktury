@@ -20,12 +20,23 @@ import org.slf4j.LoggerFactory;
 public class GoodsService implements IGoodsService {
 
     private static final Logger logger = LoggerFactory.getLogger(GoodsService.class);
-    
+
     @EJB
     private IGoodsDao goodsDao;
-    
+
     @Override
     public List<Goods> findAllGoods() {
         return goodsDao.selectAll();
+    }
+
+    @Override
+    public boolean insertNewGoods(Goods goods) {
+        try {
+            goodsDao.insert(goods);
+        } catch (Exception ex) {
+            logger.error("Error adding new goods to database. Error message: " + ex.getMessage());
+            return false;
+        }
+        return true;
     }
 }

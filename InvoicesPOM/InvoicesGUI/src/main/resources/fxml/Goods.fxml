@@ -83,7 +83,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" text="Dodaj">
+                  <Button mnemonicParsing="false" onAction="#addNewRecord" text="Dodaj">
                      <HBox.margin>
                         <Insets right="10.0" />
                      </HBox.margin>

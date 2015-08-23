@@ -12,4 +12,5 @@ import javax.ejb.Local;
 public interface IGoodsService {
 
     List<Goods> findAllGoods();
+    boolean insertNewGoods(Goods goods);
 }

@@ -41,12 +41,12 @@ public class RestUtil {
                 || response.getClientResponseStatus().equals(ClientResponse.Status.UNAUTHORIZED);
     }
     
-    public static ClientResponse generateRestGetResponse(Client client, String restUrl) {
+    public static ClientResponse generateRestGet(Client client, String restUrl) {
         WebResource webResource = client.resource(URL + restUrl);
         return webResource.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
     }
     
-    public static ClientResponse generateRestPostResponse(Client client, String restUrl, Object data) {
+    public static ClientResponse generateRestPost(Client client, String restUrl, Object data) {
         WebResource webResource = client.resource(URL + restUrl);
         return webResource.accept(MediaType.APPLICATION_XML).post(ClientResponse.class, data);
     }

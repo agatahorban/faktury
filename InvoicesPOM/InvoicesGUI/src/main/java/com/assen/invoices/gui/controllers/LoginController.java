@@ -75,7 +75,7 @@ public class LoginController implements Initializable {
         loginCredentialsDto.setLogin(loginTF.getText());
         loginCredentialsDto.setPassword(ShaUtil.sha256(passwordPF.getText()));
 
-        ClientResponse response = RestUtil.generateRestPostResponse(client, "login", loginCredentialsDto);
+        ClientResponse response = RestUtil.generateRestPost(client, "login", loginCredentialsDto);
 //                webResource.accept(MediaType.APPLICATION_XML).post(ClientResponse.class, loginCredentialsDto);
 
 //        if (response.getClientResponseStatus().equals(ClientResponse.Status.INTERNAL_SERVER_ERROR)) {
@@ -125,6 +125,7 @@ public class LoginController implements Initializable {
         } catch (IOException ex) {
             logger.error("Error reading Main.fxml file.");
             logger.error(ex.getMessage());
+            ex.printStackTrace();
         }
     }
 }

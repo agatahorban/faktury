@@ -7,7 +7,9 @@ import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -36,5 +38,18 @@ public class GoodsController {
         List<Goods> allGoods = goodsService.findAllGoods();
         GoodsListDto goodsEntity = new GoodsListDto(allGoods);
         return Response.ok().entity(goodsEntity).build();
+    }
+    
+    @POST
+    @Path("/add")
+    @Consumes(MediaType.APPLICATION_XML)
+    @Produces(MediaType.APPLICATION_XML)
+    public Response addGoods(Goods goods) {
+        boolean insertResult = goodsService.insertNewGoods(goods);
+        if(insertResult) {
+            return Response.ok().build();
+        } else {
+            return Response.serverError().build();
+        }
     }
 }
