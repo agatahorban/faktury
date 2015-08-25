@@ -63,6 +63,12 @@ public class Contractor extends BasicEntity implements Serializable {
     @XmlElement
     private PaymentDate paymentDate;
 
+    public Contractor() {
+        address = new Address();
+        bank = new Bank();
+        paymentDate = new PaymentDate();
+    }
+    
     public boolean isAddressee() {
         return addressee;
     }

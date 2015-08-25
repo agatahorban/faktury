@@ -70,6 +70,14 @@ public class Goods extends BasicEntity implements Serializable {
     @XmlElement
     private int quantity;
 
+    public Goods() {
+        rate = new VATRate();
+        unit = new UnitOfMeasure();
+        supplier = new Contractor();
+        collectivePackage = new CollectivePackage();
+        group = new Group();
+    }
+    
     public String getIndex1() {
         return index1;
     }

@@ -60,6 +60,8 @@ public class GoodsController implements Initializable {
     @FXML
     private TableColumn<GoodsWrapper, Number> priceTC;
     
+    private ObservableList<GoodsWrapper> obsGoods ;
+    
     @Inject
     private RestUtil restUtil;
     
@@ -91,6 +93,7 @@ public class GoodsController implements Initializable {
     private void addNewRecord() {
         addGoodsController.setIsEdit(false);
         addGoodsController.populateReferencedData();
+        addGoodsController.setObsGoods(obsGoods);
         
         addGoodsStage.show();
     }
@@ -113,10 +116,7 @@ public class GoodsController implements Initializable {
         GoodsListDto goodsListDto = new GoodsListDto();
         Client client = restUtil.getAuthorizedClient();
         
-        //WebResource webResource = client.resource(RestUtil.URL + "goods/all");
-        
         ClientResponse response = RestUtil.generateRestGet(client, "goods/all");
-                //webResource.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
         
         if(RestUtil.responseHasErrors(response)) {
             logger.error("Error getting all goods from database. Error status: " + response.getClientResponseStatus().getStatusCode());
@@ -142,13 +142,13 @@ public class GoodsController implements Initializable {
             addGoodsStage = new Stage();
             addGoodsStage.setTitle("Faktury");
             addGoodsStage.initOwner(stage);
-            addGoodsStage.initModality(Modality.WINDOW_MODAL);
+            addGoodsStage.initModality(Modality.APPLICATION_MODAL);
 
             addGoodsScene = new Scene(addGoodsRoot);
             addGoodsStage.setScene(addGoodsScene);
 
             addGoodsController = addGoodsLoader.getController();
-            addGoodsController.setStage(stage);
+            addGoodsController.setStage(addGoodsStage);
         } catch (IOException ex) {
             logger.error("Error reading AddGoods.fxml file.");
             logger.error(ex.getMessage());

@@ -18,6 +18,7 @@ import com.assen.invoices.gui.model.wrappers.GoodsWrapper;
 import com.assen.invoices.gui.model.wrappers.GroupWrapper;
 import com.assen.invoices.gui.model.wrappers.UnitOfMeasureWrapper;
 import com.assen.invoices.gui.model.wrappers.VATRateWrapper;
+import com.assen.invoices.gui.utils.ResettableCountDownLatch;
 import com.assen.invoices.gui.utils.RestUtil;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -85,7 +86,9 @@ public class AddGoodsController implements Initializable {
 
     private Stage stage;
 
-    private CountDownLatch latch;
+    private ObservableList<GoodsWrapper> obsGoods;
+
+    private ResettableCountDownLatch latch;
     private static final int LATCH_COUNT = 6;
 
     private boolean isEdit;
@@ -101,7 +104,7 @@ public class AddGoodsController implements Initializable {
     private RestUtil restUtil;
 
     public AddGoodsController() {
-        latch = new CountDownLatch(LATCH_COUNT);
+        latch = new ResettableCountDownLatch(LATCH_COUNT);
     }
 
     public Stage getStage() {
@@ -110,6 +113,14 @@ public class AddGoodsController implements Initializable {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+
+    public ObservableList<GoodsWrapper> getObsGoods() {
+        return obsGoods;
+    }
+
+    public void setObsGoods(ObservableList<GoodsWrapper> obsGoods) {
+        this.obsGoods = obsGoods;
     }
 
     public void setGoods(GoodsWrapper goods) {
@@ -133,6 +144,8 @@ public class AddGoodsController implements Initializable {
                 if (RestUtil.responseHasErrors(response)) {
                     logger.error("Error adding goods to database.");
                     errorsTA.appendText("Wystąpił błąd podczas dodawania nowego obiektu do bazy.\n");
+                } else {
+                    obsGoods.add(goods);
                 }
             }
         }
@@ -160,11 +173,11 @@ public class AddGoodsController implements Initializable {
     public void populateReferencedData() {
         if (!isEdit) {
             setGoods(new GoodsWrapper(new Goods()));
-            addEditButton.setText("Edytuj");
-            clearButton.setVisible(false);
-        } else {
             addEditButton.setText("Dodaj");
             clearButton.setVisible(true);
+        } else {
+            addEditButton.setText("Edytuj");
+            clearButton.setVisible(false);
         }
         ExecutorService executor = Executors.newFixedThreadPool(5);
 
@@ -191,7 +204,9 @@ public class AddGoodsController implements Initializable {
         }
 
         setChoiceBoxesValues();
-
+        
+        latch.reset();
+        
         try {
             executor.shutdown();
             executor.awaitTermination(60, TimeUnit.SECONDS);
@@ -299,52 +314,56 @@ public class AddGoodsController implements Initializable {
     }
 
     private boolean validData() {
-        if(goods.getIndex1().equals("")) {
+        if (nullOrEmptyValue(goods.getIndex1())) {
             errorsTA.appendText("Index1 nie może być pusty.\n");
         }
         
-        if(goods.getIndex2().equals("")) {
-            errorsTA.appendText("Index2 nie może być pusty.\n");
+        if(nullOrEmptyValue(goods.getIndex2())) {
+            goods.setIndex2("");
         }
-        
-        if(goods.getName().equals("")) {
+
+        if (nullOrEmptyValue(goods.getName())) {
             errorsTA.appendText("Nazwa nie może być pusta.\n");
         }
-        
-        if(contractors.get(contractorsCB.getSelectionModel().getSelectedItem()) != null) {
+
+        if (contractors.get(contractorsCB.getSelectionModel().getSelectedItem()) != null) {
             goods.setSupplierWrapper(new ContractorWrapper(
                     contractors.get(contractorsCB.getSelectionModel().getSelectedItem())));
         } else {
             errorsTA.appendText("Proszę wybrać dostawcę.\n");
         }
-        
-        if(collectivePackages.get(collectivePackageCB.getSelectionModel().getSelectedItem()) != null) {
+
+        if (collectivePackages.get(collectivePackageCB.getSelectionModel().getSelectedItem()) != null) {
             goods.setCollectivePackageWrapper(new CollectivePackageWrapper(
                     collectivePackages.get(collectivePackageCB.getSelectionModel().getSelectedItem())));
         } else {
             errorsTA.appendText("Proszę wybrać opakowanie.\n");
         }
-        
-        if(groups.get(groupCB.getSelectionModel().getSelectedItem()) != null) {
+
+        if (groups.get(groupCB.getSelectionModel().getSelectedItem()) != null) {
             goods.setGroupWrapper(new GroupWrapper(
                     groups.get(groupCB.getSelectionModel().getSelectedItem())));
         }
-        
-        if(unitsOfMeasure.get(unitOfMeasureCB.getSelectionModel().getSelectedItem()) != null) {
+
+        if (unitsOfMeasure.get(unitOfMeasureCB.getSelectionModel().getSelectedItem()) != null) {
             goods.setUnitOfMeasureWrapper(new UnitOfMeasureWrapper(
                     unitsOfMeasure.get(unitOfMeasureCB.getSelectionModel().getSelectedItem())));
         } else {
             errorsTA.appendText("Proszę wybrać jednostkę miary.\n");
         }
-        
-        if(vatRates.get(vatRateCB.getSelectionModel().getSelectedItem()) != null) {
+
+        if (vatRates.get(vatRateCB.getSelectionModel().getSelectedItem()) != null) {
             goods.setVatRateWrapper(new VATRateWrapper(
                     vatRates.get(vatRateCB.getSelectionModel().getSelectedItem())));
         } else {
             errorsTA.appendText("Proszę wybrać stawkę vat.\n");
         }
-        
+
         return errorsTA.getText().equals("");
+    }
+    
+    private boolean nullOrEmptyValue(String value) {
+        return value == null || value.equals("");
     }
 
     private void setChoiceBoxesValues() {
