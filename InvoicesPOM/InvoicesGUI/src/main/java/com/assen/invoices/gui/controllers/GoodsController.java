@@ -9,7 +9,6 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import java.io.IOException;
 import java.io.InputStream;
-//import com.sun.jersey.api.client.WebResource;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -25,7 +24,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.inject.Inject;
-//import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -126,7 +124,7 @@ public class GoodsController implements Initializable {
             goodsListDto = response.getEntity(GoodsListDto.class);
         }
         
-        ObservableList<GoodsWrapper> obsGoods = FXCollections.observableArrayList();
+        obsGoods = FXCollections.observableArrayList();
         for (Goods goods : goodsListDto.getList()) {
             GoodsWrapper goodsWrapper = new GoodsWrapper(goods);
             obsGoods.add(goodsWrapper);
@@ -143,6 +141,7 @@ public class GoodsController implements Initializable {
             addGoodsStage.setTitle("Faktury");
             addGoodsStage.initOwner(stage);
             addGoodsStage.initModality(Modality.APPLICATION_MODAL);
+            addGoodsStage.setResizable(false);
 
             addGoodsScene = new Scene(addGoodsRoot);
             addGoodsStage.setScene(addGoodsScene);

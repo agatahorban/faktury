@@ -1,36 +1,16 @@
 package com.assen.invoices.gui.controllers.add;
 
-import com.assen.invoices.dto.CollectivePackageListDto;
-import com.assen.invoices.dto.ContractorListDto;
-import com.assen.invoices.dto.GroupListDto;
-import com.assen.invoices.dto.UnitOfMeasureListDto;
-import com.assen.invoices.dto.VATRateListDto;
-import com.assen.invoices.entities.CollectivePackage;
-import com.assen.invoices.entities.Contractor;
 import com.assen.invoices.entities.Goods;
-import com.assen.invoices.entities.Group;
-import com.assen.invoices.entities.UnitOfMeasure;
-import com.assen.invoices.entities.VATRate;
 import com.assen.invoices.gui.controllers.GoodsController;
-import com.assen.invoices.gui.model.wrappers.CollectivePackageWrapper;
-import com.assen.invoices.gui.model.wrappers.ContractorWrapper;
 import com.assen.invoices.gui.model.wrappers.GoodsWrapper;
-import com.assen.invoices.gui.model.wrappers.GroupWrapper;
-import com.assen.invoices.gui.model.wrappers.UnitOfMeasureWrapper;
-import com.assen.invoices.gui.model.wrappers.VATRateWrapper;
-import com.assen.invoices.gui.utils.ResettableCountDownLatch;
+import com.assen.invoices.gui.services.api.IGoodsService;
+import com.assen.invoices.gui.services.api.IGoodsService.DataType;
 import com.assen.invoices.gui.utils.RestUtil;
+import com.assen.invoices.gui.validators.GoodsValidator;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -88,24 +68,14 @@ public class AddGoodsController implements Initializable {
 
     private ObservableList<GoodsWrapper> obsGoods;
 
-    private ResettableCountDownLatch latch;
-    private static final int LATCH_COUNT = 6;
-
     private boolean isEdit;
     private GoodsWrapper goods;
-
-    private Map<String, CollectivePackage> collectivePackages;
-    private Map<String, Group> groups;
-    private Map<String, VATRate> vatRates;
-    private Map<String, Contractor> contractors;
-    private Map<String, UnitOfMeasure> unitsOfMeasure;
 
     @Inject
     private RestUtil restUtil;
 
-    public AddGoodsController() {
-        latch = new ResettableCountDownLatch(LATCH_COUNT);
-    }
+    @Inject
+    private IGoodsService goodsService;
 
     public Stage getStage() {
         return stage;
@@ -134,8 +104,8 @@ public class AddGoodsController implements Initializable {
 
     @FXML
     private void addOrEdit() {
+        errorsTA.setText("");
         Client client = restUtil.getAuthorizedClient();
-        //TODO validation
         if (validData()) {
             if (isEdit) {
                 //TODO edit
@@ -145,7 +115,7 @@ public class AddGoodsController implements Initializable {
                     logger.error("Error adding goods to database.");
                     errorsTA.appendText("Wystąpił błąd podczas dodawania nowego obiektu do bazy.\n");
                 } else {
-                    obsGoods.add(goods);
+                    obsGoods.add(new GoodsWrapper(goods.getGoods()));
                 }
             }
         }
@@ -157,12 +127,12 @@ public class AddGoodsController implements Initializable {
 
     @FXML
     private void clear() {
-        //TODO
+        //TODO clear
     }
 
     @FXML
     private void cancel() {
-        //TODO
+        //TODO cancel
     }
 
     @Override
@@ -179,130 +149,9 @@ public class AddGoodsController implements Initializable {
             addEditButton.setText("Edytuj");
             clearButton.setVisible(false);
         }
-        ExecutorService executor = Executors.newFixedThreadPool(5);
 
-        collectivePackages = new HashMap<>();
-        groups = new HashMap<>();
-        vatRates = new HashMap<>();
-        contractors = new HashMap<>();
-        unitsOfMeasure = new HashMap<>();
-
-        Client client = restUtil.getAuthorizedClient();
-
-        executor.execute(populateCollectivePackages(client));
-        executor.execute(populateGroups(client));
-        executor.execute(populateVatRates(client));
-        executor.execute(populateUnitsOfMeasure(client));
-        executor.execute(populateContractors(client));
-
-        latch.countDown();
-
-        try {
-            latch.await();
-        } catch (InterruptedException ex) {
-            logger.error("Thread interuppted while waiting for latch to count down.");
-        }
-
+        goodsService.populateDataFromServer();
         setChoiceBoxesValues();
-        
-        latch.reset();
-        
-        try {
-            executor.shutdown();
-            executor.awaitTermination(60, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            logger.error("Termination interrupted");
-        } finally {
-            if (!executor.isTerminated()) {
-                logger.error("Killing non-finished tasks");
-            }
-            executor.shutdownNow();
-        }
-    }
-
-    private Runnable populateCollectivePackages(Client client) {
-        return () -> {
-            ClientResponse response = RestUtil.generateRestGet(client, "collectivePackages/all");
-            if (RestUtil.responseHasErrors(response)) {
-                logger.error("Error getting all collectivePackages from database. Error status: "
-                        + response.getClientResponseStatus().getStatusCode());
-            } else {
-                CollectivePackageListDto packagesDto = response.getEntity(CollectivePackageListDto.class);
-
-                packagesDto.getPackages().stream().parallel().forEach((aPackage) -> {
-                    collectivePackages.put(aPackage.getCutName(), aPackage);
-                });
-            }
-            latch.countDown();
-        };
-    }
-
-    private Runnable populateGroups(Client client) {
-        return () -> {
-            ClientResponse response = RestUtil.generateRestGet(client, "groups/all");
-            if (RestUtil.responseHasErrors(response)) {
-                logger.error("Error getting all groups from database. Error status: "
-                        + response.getClientResponseStatus().getStatusCode());
-            } else {
-                GroupListDto groupsDto = response.getEntity(GroupListDto.class);
-
-                groupsDto.getGroups().stream().parallel().forEach((group) -> {
-                    groups.put(group.getName(), group);
-                });
-            }
-            latch.countDown();
-        };
-    }
-
-    private Runnable populateVatRates(Client client) {
-        return () -> {
-            ClientResponse response = RestUtil.generateRestGet(client, "vatRates/all");
-            if (RestUtil.responseHasErrors(response)) {
-                logger.error("Error getting all vatRates from database. Error status: "
-                        + response.getClientResponseStatus().getStatusCode());
-            } else {
-                VATRateListDto vatRatesDto = response.getEntity(VATRateListDto.class);
-
-                vatRatesDto.getVatRates().stream().parallel().forEach((vatRate) -> {
-                    vatRates.put(vatRate.getName(), vatRate);
-                });
-            }
-            latch.countDown();
-        };
-    }
-
-    private Runnable populateUnitsOfMeasure(Client client) {
-        return () -> {
-            ClientResponse response = RestUtil.generateRestGet(client, "unitsOfMeasure/all");
-            if (RestUtil.responseHasErrors(response)) {
-                logger.error("Error getting all unitsOfMeasure groups from database. Error status: "
-                        + response.getClientResponseStatus().getStatusCode());
-            } else {
-                UnitOfMeasureListDto unitsDto = response.getEntity(UnitOfMeasureListDto.class);
-
-                unitsDto.getUnits().stream().parallel().forEach((unit) -> {
-                    unitsOfMeasure.put(unit.getName(), unit);
-                });
-            }
-            latch.countDown();
-        };
-    }
-
-    private Runnable populateContractors(Client client) {
-        return () -> {
-            ClientResponse response = RestUtil.generateRestGet(client, "contractors/all");
-            if (RestUtil.responseHasErrors(response)) {
-                logger.error("Error getting all contractors groups from database. Error status: "
-                        + response.getClientResponseStatus().getStatusCode());
-            } else {
-                ContractorListDto contractorsDto = response.getEntity(ContractorListDto.class);
-
-                contractorsDto.getList().stream().parallel().forEach((contractor) -> {
-                    contractors.put(contractor.getCutName(), contractor);
-                });
-            }
-            latch.countDown();
-        };
     }
 
     private void setBindings() {
@@ -311,88 +160,32 @@ public class AddGoodsController implements Initializable {
         nameTF.textProperty().bindBidirectional(goods.nameProperty());
         quantityTF.textProperty().bindBidirectional(goods.quantityProperty(), new NumberStringConverter());
         priceTF.textProperty().bindBidirectional(goods.priceProperty(), new NumberStringConverter());
+        priceHigherChB.selectedProperty().bindBidirectional(goods.priceHigherProperty());
     }
 
     private boolean validData() {
-        if (nullOrEmptyValue(goods.getIndex1())) {
-            errorsTA.appendText("Index1 nie może być pusty.\n");
-        }
-        
-        if(nullOrEmptyValue(goods.getIndex2())) {
-            goods.setIndex2("");
-        }
+        GoodsValidator.GoodsValidationData validationData
+                = new GoodsValidator.GoodsValidationData(
+                        (String) contractorsCB.getSelectionModel().getSelectedItem(),
+                        (String) collectivePackageCB.getSelectionModel().getSelectedItem(),
+                        (String) groupCB.getSelectionModel().getSelectedItem(),
+                        (String) unitOfMeasureCB.getSelectionModel().getSelectedItem(),
+                        (String) vatRateCB.getSelectionModel().getSelectedItem());
+        String errors = goodsService.validData(goods, validationData);
 
-        if (nullOrEmptyValue(goods.getName())) {
-            errorsTA.appendText("Nazwa nie może być pusta.\n");
+        if (!errors.equals("")) {
+            logger.info("Invalid Goods data: " + errors);
+            errorsTA.appendText(errors);
+            return false;
         }
-
-        if (contractors.get(contractorsCB.getSelectionModel().getSelectedItem()) != null) {
-            goods.setSupplierWrapper(new ContractorWrapper(
-                    contractors.get(contractorsCB.getSelectionModel().getSelectedItem())));
-        } else {
-            errorsTA.appendText("Proszę wybrać dostawcę.\n");
-        }
-
-        if (collectivePackages.get(collectivePackageCB.getSelectionModel().getSelectedItem()) != null) {
-            goods.setCollectivePackageWrapper(new CollectivePackageWrapper(
-                    collectivePackages.get(collectivePackageCB.getSelectionModel().getSelectedItem())));
-        } else {
-            errorsTA.appendText("Proszę wybrać opakowanie.\n");
-        }
-
-        if (groups.get(groupCB.getSelectionModel().getSelectedItem()) != null) {
-            goods.setGroupWrapper(new GroupWrapper(
-                    groups.get(groupCB.getSelectionModel().getSelectedItem())));
-        }
-
-        if (unitsOfMeasure.get(unitOfMeasureCB.getSelectionModel().getSelectedItem()) != null) {
-            goods.setUnitOfMeasureWrapper(new UnitOfMeasureWrapper(
-                    unitsOfMeasure.get(unitOfMeasureCB.getSelectionModel().getSelectedItem())));
-        } else {
-            errorsTA.appendText("Proszę wybrać jednostkę miary.\n");
-        }
-
-        if (vatRates.get(vatRateCB.getSelectionModel().getSelectedItem()) != null) {
-            goods.setVatRateWrapper(new VATRateWrapper(
-                    vatRates.get(vatRateCB.getSelectionModel().getSelectedItem())));
-        } else {
-            errorsTA.appendText("Proszę wybrać stawkę vat.\n");
-        }
-
-        return errorsTA.getText().equals("");
-    }
-    
-    private boolean nullOrEmptyValue(String value) {
-        return value == null || value.equals("");
+        return true;
     }
 
     private void setChoiceBoxesValues() {
-        ObservableList<String> obsContractors = FXCollections.observableArrayList();
-        ObservableList<String> obsPackages = FXCollections.observableArrayList();
-        ObservableList<String> obsGroups = FXCollections.observableArrayList();
-        ObservableList<String> obsVatRates = FXCollections.observableArrayList();
-        ObservableList<String> obsUnitsOfMeasure = FXCollections.observableArrayList();
-
-        collectivePackages.entrySet().stream().parallel().forEach((entrySet) -> {
-            obsPackages.add(entrySet.getKey());
-        });
-        groups.entrySet().stream().parallel().forEach((entrySet) -> {
-            obsGroups.add(entrySet.getKey());
-        });
-        vatRates.entrySet().stream().parallel().forEach((entrySet) -> {
-            obsVatRates.add(entrySet.getKey());
-        });
-        contractors.entrySet().stream().parallel().forEach((entrySet) -> {
-            obsContractors.add(entrySet.getKey());
-        });
-        unitsOfMeasure.entrySet().stream().parallel().forEach((entrySet) -> {
-            obsUnitsOfMeasure.add(entrySet.getKey());
-        });
-
-        collectivePackageCB.setItems(obsPackages);
-        groupCB.setItems(obsGroups);
-        vatRateCB.setItems(obsVatRates);
-        contractorsCB.setItems(obsContractors);
-        unitOfMeasureCB.setItems(obsUnitsOfMeasure);
+        collectivePackageCB.setItems(goodsService.getObservableData(DataType.COLLECTIVE_PACKAGES));
+        groupCB.setItems(goodsService.getObservableData(DataType.GROUPS));
+        vatRateCB.setItems(goodsService.getObservableData(DataType.VAT_RATES));
+        contractorsCB.setItems(goodsService.getObservableData(DataType.CONTRACTORS));
+        unitOfMeasureCB.setItems(goodsService.getObservableData(DataType.UNITS_OF_MEASURE));
     }
 }
