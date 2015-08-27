@@ -3,11 +3,13 @@ package com.assen.invoices.gui.services.impl;
 import com.assen.invoices.gui.services.api.IGoodsService;
 import com.assen.invoices.dto.CollectivePackageListDto;
 import com.assen.invoices.dto.ContractorListDto;
+import com.assen.invoices.dto.GoodsListDto;
 import com.assen.invoices.dto.GroupListDto;
 import com.assen.invoices.dto.UnitOfMeasureListDto;
 import com.assen.invoices.dto.VATRateListDto;
 import com.assen.invoices.entities.CollectivePackage;
 import com.assen.invoices.entities.Contractor;
+import com.assen.invoices.entities.Goods;
 import com.assen.invoices.entities.Group;
 import com.assen.invoices.entities.UnitOfMeasure;
 import com.assen.invoices.entities.VATRate;
@@ -17,7 +19,9 @@ import com.assen.invoices.gui.utils.RestUtil;
 import com.assen.invoices.gui.validators.GoodsValidator;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -53,7 +57,7 @@ public class GoodsService implements IGoodsService {
     }
 
     @Override
-    public void populateDataFromServer() {
+    public void populateAddGoodsDataFromServer() {
         ExecutorService executor = Executors.newFixedThreadPool(5);
 
         collectivePackages = new HashMap<>();
@@ -110,15 +114,15 @@ public class GoodsService implements IGoodsService {
             latch.countDown();
         };
     }
-    
+
     @Override
-    public String validData(GoodsWrapper goods, 
+    public String validData(GoodsWrapper goods,
             GoodsValidator.GoodsValidationData validationData) {
         GoodsValidator validator = new GoodsValidator();
         GoodsValidator.GoodsMapReferences mapReferences;
-        mapReferences = new GoodsValidator.GoodsMapReferences(collectivePackages, groups, 
+        mapReferences = new GoodsValidator.GoodsMapReferences(collectivePackages, groups,
                 vatRates, contractors, unitsOfMeasure);
-        
+
         return validator.validateData(goods, validationData, mapReferences);
     }
 
@@ -196,5 +200,50 @@ public class GoodsService implements IGoodsService {
                 });
                 break;
         }
+    }
+
+    @Override
+    public boolean deleteData(List<GoodsWrapper> goodsToDelete) {
+        logger.info("Deleting " + goodsToDelete.size() + " goods records.");
+        List<Goods> goodsDelete = new ArrayList<>();
+        goodsToDelete.stream().parallel().forEach((goodsToDelete1) -> {
+            goodsDelete.add(goodsToDelete1.getGoods());
+        });
+
+        Client client = restUtil.getAuthorizedClient();
+
+        GoodsListDto entitiesToDelete = new GoodsListDto(goodsDelete);
+        ClientResponse response = RestUtil.generateRestPost(client,
+                "goods/delete", entitiesToDelete);
+        if (RestUtil.responseHasErrors(response)) {
+            logger.error("Error deleting goods from database.");
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public ObservableList<GoodsWrapper> populateAllGoods() {
+        GoodsListDto goodsListDto = new GoodsListDto();
+        Client client = restUtil.getAuthorizedClient();
+
+        ClientResponse response = RestUtil.generateRestGet(client, "goods/all");
+
+        if (RestUtil.responseHasErrors(response)) {
+            logger.error("Error getting all goods from database. Error status: " 
+                    + response.getClientResponseStatus().getStatusCode());
+        } else {
+            logger.info("Populating all goods from database.");
+
+            goodsListDto = response.getEntity(GoodsListDto.class);
+        }
+
+        ObservableList<GoodsWrapper> obsGoods = FXCollections.observableArrayList();
+        for (Goods goods : goodsListDto.getList()) {
+            GoodsWrapper goodsWrapper = new GoodsWrapper(goods);
+            obsGoods.add(goodsWrapper);
+        }
+        
+        return obsGoods;
     }
 }

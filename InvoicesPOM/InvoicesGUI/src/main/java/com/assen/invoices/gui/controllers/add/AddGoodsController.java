@@ -97,7 +97,6 @@ public class AddGoodsController implements Initializable {
     public void setGoods(GoodsWrapper goods) {
         this.goods = goods;
         originalGoods = Goods.copyOf(goods.getGoods());
-        //this.originalGoods = new GoodsWrapper(copiedGoods);
         setBindings();
     }
 
@@ -166,7 +165,7 @@ public class AddGoodsController implements Initializable {
             clearButton.setVisible(false);
         }
 
-        goodsService.populateDataFromServer();
+        goodsService.populateAddGoodsDataFromServer();
         setChoiceBoxesValues();
     }
 

@@ -2,6 +2,7 @@ package com.assen.invoices.gui.services.api;
 
 import com.assen.invoices.gui.model.wrappers.GoodsWrapper;
 import com.assen.invoices.gui.validators.GoodsValidator;
+import java.util.List;
 import javafx.collections.ObservableList;
 
 /**
@@ -12,9 +13,13 @@ public interface IGoodsService {
 
     ObservableList<String> getObservableData(DataType type);
 
-    void populateDataFromServer();
-
+    void populateAddGoodsDataFromServer();
+    
     String validData(GoodsWrapper goods, GoodsValidator.GoodsValidationData validationData);
+    
+    boolean deleteData(List<GoodsWrapper> goodsToDelete);
+    
+    ObservableList<GoodsWrapper> populateAllGoods();
     
     public enum DataType {
 
