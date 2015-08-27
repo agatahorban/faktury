@@ -28,14 +28,11 @@ public abstract class CrudDao<T extends Serializable> implements ICrudDao<T> {
     private String getDomainClassName() {
         return getDomainClass().getName();
     }
-//
-//    public CrudDao(Class<T> entityClass) {
-//        this.domainClass = entityClass;
-//    }
 
     @Override
-    public void insert(T entity) {
+    public T insert(T entity) {
         em.persist(entity);
+        return entity;
     }
 
     @Override
@@ -44,8 +41,8 @@ public abstract class CrudDao<T extends Serializable> implements ICrudDao<T> {
     }
 
     @Override
-    public void update(T entity) {
-        em.merge(entity);
+    public T update(T entity) {
+        return em.merge(entity);
     }
 
     @Override

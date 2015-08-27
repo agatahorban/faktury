@@ -18,6 +18,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -94,6 +95,28 @@ public class GoodsController implements Initializable {
         addGoodsController.setObsGoods(obsGoods);
         
         addGoodsStage.show();
+    }
+    
+    @FXML
+    private void editGoods() {
+        GoodsWrapper goodsToEdit = goodsTV.getSelectionModel().getSelectedItem();
+        if(goodsToEdit != null) {
+            addGoodsController.setIsEdit(true);
+            addGoodsController.setGoods(goodsToEdit);
+            addGoodsController.populateReferencedData();
+            
+            addGoodsStage.showAndWait();
+            
+            goodsTV.getColumns().get(0).setVisible(false);
+            goodsTV.getColumns().get(0).setVisible(true);
+        } else {
+            Alert warning = new Alert(Alert.AlertType.WARNING);
+            warning.setTitle("Brak zaznaczonego rekordu");
+            warning.setHeaderText(null);
+            warning.setContentText("Proszę wybrać towar do edycji.");
+            
+            warning.showAndWait();
+        }
     }
     
     private void setBingings() {

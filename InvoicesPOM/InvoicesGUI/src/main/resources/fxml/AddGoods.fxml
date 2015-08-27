@@ -7,7 +7,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="611.0" prefWidth="631.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.assen.invoices.gui.controllers.add.AddGoodsController">
+<AnchorPane id="AnchorPane" prefHeight="611.0" prefWidth="631.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.assen.invoices.gui.controllers.add.AddGoodsController">
    <children>
       <GridPane prefHeight="611.0" prefWidth="631.0">
         <columnConstraints>
@@ -195,7 +195,7 @@
                   </Button>
                </children>
             </HBox>
-            <TextArea fx:id="errorsTA" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="6" />
+            <TextArea fx:id="errorsTA" editable="false" prefHeight="200.0" prefWidth="200.0" style="-fx-text-fill: red;" GridPane.rowIndex="6" />
             <Separator prefWidth="200.0" GridPane.rowIndex="5" />
          </children>
          <padding>

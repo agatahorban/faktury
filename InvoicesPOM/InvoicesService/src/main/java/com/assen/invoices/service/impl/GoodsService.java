@@ -30,13 +30,25 @@ public class GoodsService implements IGoodsService {
     }
 
     @Override
-    public boolean insertNewGoods(Goods goods) {
+    public Goods insertNewGoods(Goods goods) {
         try {
-            goodsDao.insert(goods);
+            goods = goodsDao.insert(goods);
         } catch (Exception ex) {
             logger.error("Error adding new goods to database. Error message: " + ex.getMessage());
-            return false;
+            return null;
         }
-        return true;
+        return goods;
+    }
+
+    @Override
+    public Goods updateGoods(Goods goods) {
+        try {
+            goods = goodsDao.update(goods);
+        } catch (Exception ex) {
+            logger.error("Error updating goods data. Goods: " + goods.getId() 
+                    + ", error message: " + ex.getMessage());
+            return null;
+        }
+        return goods;
     }
 }

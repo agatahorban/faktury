@@ -70,6 +70,7 @@ public class AddGoodsController implements Initializable {
 
     private boolean isEdit;
     private GoodsWrapper goods;
+    private Goods originalGoods;
 
     @Inject
     private RestUtil restUtil;
@@ -95,6 +96,8 @@ public class AddGoodsController implements Initializable {
 
     public void setGoods(GoodsWrapper goods) {
         this.goods = goods;
+        originalGoods = Goods.copyOf(goods.getGoods());
+        //this.originalGoods = new GoodsWrapper(copiedGoods);
         setBindings();
     }
 
@@ -108,13 +111,20 @@ public class AddGoodsController implements Initializable {
         Client client = restUtil.getAuthorizedClient();
         if (validData()) {
             if (isEdit) {
-                //TODO edit
+                ClientResponse response = RestUtil.generateRestPost(client, "goods/update", goods.getGoods());
+                if (RestUtil.responseHasErrors(response)) {
+                    logger.error("Error updating goods to database.");
+                    errorsTA.appendText("Wystąpił błąd podczas aktualizowania nowego obiektu do bazy.\n");
+                } else {
+                    goods.setGoods(response.getEntity(Goods.class));
+                }
             } else {
                 ClientResponse response = RestUtil.generateRestPost(client, "goods/add", goods.getGoods());
                 if (RestUtil.responseHasErrors(response)) {
                     logger.error("Error adding goods to database.");
                     errorsTA.appendText("Wystąpił błąd podczas dodawania nowego obiektu do bazy.\n");
                 } else {
+                    goods.setGoods(response.getEntity(Goods.class));
                     obsGoods.add(new GoodsWrapper(goods.getGoods()));
                 }
             }
@@ -132,7 +142,11 @@ public class AddGoodsController implements Initializable {
 
     @FXML
     private void cancel() {
-        //TODO cancel
+        errorsTA.setText("");
+        if(isEdit) {
+            goods.setGoods(originalGoods);
+        }
+        stage.close();
     }
 
     @Override
@@ -187,5 +201,18 @@ public class AddGoodsController implements Initializable {
         vatRateCB.setItems(goodsService.getObservableData(DataType.VAT_RATES));
         contractorsCB.setItems(goodsService.getObservableData(DataType.CONTRACTORS));
         unitOfMeasureCB.setItems(goodsService.getObservableData(DataType.UNITS_OF_MEASURE));
+        
+        if(isEdit) {
+            collectivePackageCB.getSelectionModel()
+                    .select(goods.getCollectivePackageWrapper().getCutName());
+            groupCB.getSelectionModel()
+                    .select(goods.getGroupWrapper().getName());
+            vatRateCB.getSelectionModel()
+                    .select(goods.getVatRateWrapper().getName());
+            contractorsCB.getSelectionModel()
+                    .select(goods.getSupplierWrapper().getCutName());
+            unitOfMeasureCB.getSelectionModel()
+                    .select(goods.getUnitOfMeasureWrapper().getName());
+        }
     }
 }

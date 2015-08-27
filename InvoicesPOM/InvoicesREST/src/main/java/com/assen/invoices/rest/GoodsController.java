@@ -45,9 +45,22 @@ public class GoodsController {
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
     public Response addGoods(Goods goods) {
-        boolean insertResult = goodsService.insertNewGoods(goods);
-        if(insertResult) {
-            return Response.ok().build();
+        Goods insertResult = goodsService.insertNewGoods(goods);
+        if(insertResult != null) {
+            return Response.ok().entity(insertResult).build();
+        } else {
+            return Response.serverError().build();
+        }
+    }
+    
+    @POST
+    @Path("/update")
+    @Consumes(MediaType.APPLICATION_XML)
+    @Produces(MediaType.APPLICATION_XML)
+    public Response updateGoods(Goods goods) {
+        Goods updateResult = goodsService.updateGoods(goods);
+        if(updateResult != null) {
+            return Response.ok().entity(updateResult).build();
         } else {
             return Response.serverError().build();
         }

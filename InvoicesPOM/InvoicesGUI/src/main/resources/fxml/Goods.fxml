@@ -8,7 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="508.0" prefWidth="829.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.assen.invoices.gui.controllers.GoodsController">
+<StackPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="508.0" prefWidth="829.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.assen.invoices.gui.controllers.GoodsController">
    <children>
       <VBox prefHeight="200.0" prefWidth="100.0">
          <children>
@@ -78,7 +78,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" text="Edytuj">
+                  <Button mnemonicParsing="false" onAction="#editGoods" text="Edytuj">
                      <HBox.margin>
                         <Insets right="10.0" />
                      </HBox.margin>
