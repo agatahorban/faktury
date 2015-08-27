@@ -137,13 +137,15 @@ public class AddGoodsController implements Initializable {
 
     @FXML
     private void clear() {
-        //TODO clear
+        goods.setGoods(new Goods());
+        setBindings();
+        setChoiceBoxesValues();
     }
 
     @FXML
     private void cancel() {
         errorsTA.setText("");
-        if(isEdit) {
+        if (isEdit) {
             goods.setGoods(originalGoods);
         }
         stage.close();
@@ -201,8 +203,8 @@ public class AddGoodsController implements Initializable {
         vatRateCB.setItems(goodsService.getObservableData(DataType.VAT_RATES));
         contractorsCB.setItems(goodsService.getObservableData(DataType.CONTRACTORS));
         unitOfMeasureCB.setItems(goodsService.getObservableData(DataType.UNITS_OF_MEASURE));
-        
-        if(isEdit) {
+
+        if (isEdit) {
             collectivePackageCB.getSelectionModel()
                     .select(goods.getCollectivePackageWrapper().getCutName());
             groupCB.getSelectionModel()

@@ -10,6 +10,9 @@ import com.sun.jersey.api.client.ClientResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,6 +22,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -34,12 +39,12 @@ import org.slf4j.LoggerFactory;
  * @author Arek
  */
 public class GoodsController implements Initializable {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(GoodsController.class);
-    
+
     @FXML
     private TextField searchTF;
-    
+
     @FXML
     private TableView<GoodsWrapper> goodsTV;
     @FXML
@@ -58,14 +63,14 @@ public class GoodsController implements Initializable {
     private TableColumn<GoodsWrapper, Number> quantityTC;
     @FXML
     private TableColumn<GoodsWrapper, Number> priceTC;
-    
-    private ObservableList<GoodsWrapper> obsGoods ;
-    
+
+    private ObservableList<GoodsWrapper> obsGoods;
+
     @Inject
     private RestUtil restUtil;
-    
+
     private Stage stage;
-    
+
     @Inject
     private FXMLLoader addGoodsLoader;
 
@@ -76,6 +81,7 @@ public class GoodsController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        goodsTV.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         setBingings();
         initAddGoodsWindow();
     }
@@ -87,26 +93,26 @@ public class GoodsController implements Initializable {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-    
+
     @FXML
     private void addNewRecord() {
         addGoodsController.setIsEdit(false);
         addGoodsController.populateReferencedData();
         addGoodsController.setObsGoods(obsGoods);
-        
+
         addGoodsStage.show();
     }
-    
+
     @FXML
     private void editGoods() {
-        GoodsWrapper goodsToEdit = goodsTV.getSelectionModel().getSelectedItem();
-        if(goodsToEdit != null) {
+        List<GoodsWrapper> goodsToEdit = goodsTV.getSelectionModel().getSelectedItems();
+        if (!goodsToEdit.isEmpty()) {
             addGoodsController.setIsEdit(true);
-            addGoodsController.setGoods(goodsToEdit);
+            addGoodsController.setGoods(goodsToEdit.get(0));
             addGoodsController.populateReferencedData();
-            
+
             addGoodsStage.showAndWait();
-            
+
             goodsTV.getColumns().get(0).setVisible(false);
             goodsTV.getColumns().get(0).setVisible(true);
         } else {
@@ -114,11 +120,46 @@ public class GoodsController implements Initializable {
             warning.setTitle("Brak zaznaczonego rekordu");
             warning.setHeaderText(null);
             warning.setContentText("Proszę wybrać towar do edycji.");
-            
+
             warning.showAndWait();
         }
     }
-    
+
+    @FXML
+    private void deleteRecords() {
+        List<GoodsWrapper> goodsToDelete = goodsTV.getSelectionModel().getSelectedItems();
+        Alert deleteDialog = new Alert(Alert.AlertType.CONFIRMATION);
+        deleteDialog.setTitle("Potwierdzenie usunięcia rekordów");
+        deleteDialog.setHeaderText(null);
+        deleteDialog.setContentText("Czy napewno chcesz usunąć następującą liczbę rekordów: "
+                + goodsToDelete.size());
+
+        Optional<ButtonType> result = deleteDialog.showAndWait();
+        if (result.get().equals(ButtonType.OK)) {
+            logger.info("Deleting " + goodsToDelete.size() + " goods records.");
+            List<Goods> goodsDelete = new ArrayList<>();
+            goodsToDelete.stream().parallel().forEach((goodsToDelete1) -> {
+                goodsDelete.add(goodsToDelete1.getGoods());
+            });
+            
+            Client client = restUtil.getAuthorizedClient();
+            
+            GoodsListDto entitiesToDelete = new GoodsListDto(goodsDelete);
+            ClientResponse response = RestUtil.generateRestPost(client, 
+                    "goods/delete", entitiesToDelete);
+            if (RestUtil.responseHasErrors(response)) {
+                logger.error("Error deleting goods from database.");
+                
+                Alert error = new Alert(Alert.AlertType.ERROR);
+                error.setTitle("Niepowodzenie usuwania");
+                error.setHeaderText(null);
+                error.setContentText("Wystąpił błąd podczas próby usunięcia rekordów z bazy.");
+            } else {
+                obsGoods.removeAll(goodsToDelete);
+            }
+        }
+    }
+
     private void setBingings() {
         index1TC.setCellValueFactory(cellData -> cellData.getValue().index1Property());
         index2TC.setCellValueFactory(cellData -> cellData.getValue().index2Property());
@@ -132,30 +173,30 @@ public class GoodsController implements Initializable {
         quantityTC.setCellValueFactory(cellData -> cellData.getValue().quantityProperty());
         priceTC.setCellValueFactory(cellData -> cellData.getValue().priceProperty());
     }
-    
+
     public void populateData() {
         GoodsListDto goodsListDto = new GoodsListDto();
         Client client = restUtil.getAuthorizedClient();
-        
+
         ClientResponse response = RestUtil.generateRestGet(client, "goods/all");
-        
-        if(RestUtil.responseHasErrors(response)) {
+
+        if (RestUtil.responseHasErrors(response)) {
             logger.error("Error getting all goods from database. Error status: " + response.getClientResponseStatus().getStatusCode());
         } else {
             logger.info("Populating all goods from database.");
-            
+
             goodsListDto = response.getEntity(GoodsListDto.class);
         }
-        
+
         obsGoods = FXCollections.observableArrayList();
         for (Goods goods : goodsListDto.getList()) {
             GoodsWrapper goodsWrapper = new GoodsWrapper(goods);
             obsGoods.add(goodsWrapper);
         }
-        
+
         goodsTV.setItems(obsGoods);
     }
-    
+
     private void initAddGoodsWindow() {
         try (InputStream addGoodsFXML = getClass().getResourceAsStream("/fxml/AddGoods.fxml")) {
             addGoodsRoot = addGoodsLoader.load(addGoodsFXML);

@@ -1,6 +1,7 @@
 package com.assen.invoices.service.impl;
 
 import com.assen.invoices.dao.api.IGoodsDao;
+import com.assen.invoices.dto.GoodsListDto;
 import com.assen.invoices.entities.Goods;
 import com.assen.invoices.service.api.IGoodsService;
 import java.util.List;
@@ -45,10 +46,24 @@ public class GoodsService implements IGoodsService {
         try {
             goods = goodsDao.update(goods);
         } catch (Exception ex) {
-            logger.error("Error updating goods data. Goods: " + goods.getId() 
+            logger.error("Error updating goods data. Goods: " + goods.getId()
                     + ", error message: " + ex.getMessage());
             return null;
         }
         return goods;
+    }
+
+    @Override
+    public boolean removeGoods(GoodsListDto goodsList) {
+        try {
+            goodsList.getList().stream().parallel().forEach((goodsToDelete) -> {
+                goodsDao.remove(goodsToDelete);
+            });
+        } catch (Exception ex) {
+            logger.error("Error deleting goods from database. Error message: "
+                    + ex.getMessage());
+            return false;
+        }
+        return true;
     }
 }

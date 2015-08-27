@@ -1,5 +1,6 @@
 package com.assen.invoices.service.api;
 
+import com.assen.invoices.dto.GoodsListDto;
 import com.assen.invoices.entities.Goods;
 import java.util.List;
 import javax.ejb.Local;
@@ -14,4 +15,5 @@ public interface IGoodsService {
     List<Goods> findAllGoods();
     Goods insertNewGoods(Goods goods);
     Goods updateGoods(Goods goods);
+    boolean removeGoods(GoodsListDto goodsList);
 }

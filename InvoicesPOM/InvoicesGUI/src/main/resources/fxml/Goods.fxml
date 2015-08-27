@@ -73,7 +73,7 @@
             </HBox>
             <HBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="28.0" prefWidth="600.0">
                <children>
-                  <Button mnemonicParsing="false" text="Usuń">
+                  <Button mnemonicParsing="false" onAction="#deleteRecords" text="Usuń">
                      <HBox.margin>
                         <Insets right="10.0" />
                      </HBox.margin>

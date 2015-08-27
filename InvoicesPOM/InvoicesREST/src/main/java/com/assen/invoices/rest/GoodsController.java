@@ -23,14 +23,14 @@ import org.slf4j.LoggerFactory;
  */
 @Stateless
 @Path("/goods")
-@RolesAllowed({"ADMIN","PERM_GOODS"})
+@RolesAllowed({"ADMIN", "PERM_GOODS"})
 public class GoodsController {
 
     private static final Logger logger = LoggerFactory.getLogger(GoodsController.class);
-    
+
     @EJB
     private IGoodsService goodsService;
-    
+
     @GET
     @Path("/all")
     @Produces(MediaType.APPLICATION_XML)
@@ -39,28 +39,41 @@ public class GoodsController {
         GoodsListDto goodsEntity = new GoodsListDto(allGoods);
         return Response.ok().entity(goodsEntity).build();
     }
-    
+
     @POST
     @Path("/add")
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
     public Response addGoods(Goods goods) {
         Goods insertResult = goodsService.insertNewGoods(goods);
-        if(insertResult != null) {
+        if (insertResult != null) {
             return Response.ok().entity(insertResult).build();
         } else {
             return Response.serverError().build();
         }
     }
-    
+
     @POST
     @Path("/update")
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
     public Response updateGoods(Goods goods) {
         Goods updateResult = goodsService.updateGoods(goods);
-        if(updateResult != null) {
+        if (updateResult != null) {
             return Response.ok().entity(updateResult).build();
+        } else {
+            return Response.serverError().build();
+        }
+    }
+
+    @POST
+    @Path("/delete")
+    @Consumes(MediaType.APPLICATION_XML)
+    @Produces(MediaType.APPLICATION_XML)
+    public Response deleteGoods(GoodsListDto goodsToDelete) {
+        boolean deleteResult = goodsService.removeGoods(goodsToDelete);
+        if (deleteResult) {
+            return Response.ok().build();
         } else {
             return Response.serverError().build();
         }
