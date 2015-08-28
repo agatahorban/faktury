@@ -70,6 +70,32 @@ public class Goods extends BasicEntity implements Serializable {
     @XmlElement
     private int quantity;
 
+    public Goods() {
+        rate = new VATRate();
+        unit = new UnitOfMeasure();
+        supplier = new Contractor();
+        collectivePackage = new CollectivePackage();
+        group = new Group();
+    }
+    
+    public static Goods copyOf(Goods goods) {
+        Goods newGoods = new Goods();
+        newGoods.setCollectivePackage(goods.getCollectivePackage());
+        newGoods.setGroup(goods.getGroup());
+        newGoods.setId(goods.getId());
+        newGoods.setIndex1(goods.getIndex1());
+        newGoods.setIndex2(goods.getIndex2());
+        newGoods.setName(goods.getName());
+        newGoods.setPrice(goods.getPrice());
+        newGoods.setPriceHigher(goods.isPriceHigher());
+        newGoods.setQuantity(goods.getQuantity());
+        newGoods.setRate(goods.getRate());
+        newGoods.setSupplier(goods.getSupplier());
+        newGoods.setUnit(goods.getUnit());
+        newGoods.setVersion(goods.getVersion());
+        return newGoods;
+    }
+    
     public String getIndex1() {
         return index1;
     }

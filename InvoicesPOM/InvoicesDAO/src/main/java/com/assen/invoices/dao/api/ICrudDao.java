@@ -9,11 +9,11 @@ import java.util.List;
  */
 public interface ICrudDao<T extends Serializable> extends Serializable {
 
-    void insert(T entity);
+    T insert(T entity);
     
     void remove(T entity);
     
-    void update(T entity);
+    T update(T entity);
     
     T select(Serializable id);
     

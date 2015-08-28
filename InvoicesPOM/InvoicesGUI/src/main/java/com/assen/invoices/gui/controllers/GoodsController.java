@@ -1,24 +1,30 @@
 package com.assen.invoices.gui.controllers;
 
-import com.assen.invoices.dto.GoodsListDto;
-import com.assen.invoices.entities.Goods;
+import com.assen.invoices.gui.controllers.add.AddGoodsController;
 import com.assen.invoices.gui.model.wrappers.GoodsWrapper;
-import com.assen.invoices.gui.utils.RestUtil;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-//import com.sun.jersey.api.client.WebResource;
+import com.assen.invoices.gui.services.api.IGoodsService;
+import com.assen.invoices.gui.utils.AlertUtil;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
+import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.inject.Inject;
-//import javax.ws.rs.core.MediaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,12 +34,12 @@ import org.slf4j.LoggerFactory;
  * @author Arek
  */
 public class GoodsController implements Initializable {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(GoodsController.class);
-    
+
     @FXML
     private TextField searchTF;
-    
+
     @FXML
     private TableView<GoodsWrapper> goodsTV;
     @FXML
@@ -52,15 +58,27 @@ public class GoodsController implements Initializable {
     private TableColumn<GoodsWrapper, Number> quantityTC;
     @FXML
     private TableColumn<GoodsWrapper, Number> priceTC;
-    
+
+    private ObservableList<GoodsWrapper> obsGoods;
+
     @Inject
-    private RestUtil restUtil;
-    
+    private IGoodsService goodsService;
+
     private Stage stage;
+
+    @Inject
+    private FXMLLoader addGoodsLoader;
+
+    private Parent addGoodsRoot;
+    private Stage addGoodsStage;
+    private Scene addGoodsScene;
+    private AddGoodsController addGoodsController;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        goodsTV.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         setBingings();
+        initAddGoodsWindow();
     }
 
     public Stage getStage() {
@@ -70,7 +88,79 @@ public class GoodsController implements Initializable {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+
+    @FXML
+    private void addNewRecord() {
+        addGoodsController.setIsEdit(false);
+        addGoodsController.populateReferencedData();
+        addGoodsController.setObsGoods(obsGoods);
+
+        addGoodsStage.show();
+    }
+
+    @FXML
+    private void editGoods() {
+        List<GoodsWrapper> goodsToEdit = goodsTV.getSelectionModel().getSelectedItems();
+        if (!goodsToEdit.isEmpty()) {
+            addGoodsController.setIsEdit(true);
+            addGoodsController.setGoods(goodsToEdit.get(0));
+            addGoodsController.populateReferencedData();
+
+            addGoodsStage.showAndWait();
+
+            goodsTV.getColumns().get(0).setVisible(false);
+            goodsTV.getColumns().get(0).setVisible(true);
+        } else {
+            Alert warning = AlertUtil.createWarningAlert("Brak zaznaczonego rekordu",
+                    "ProszÄ™ wybraÄ‡ towar do edycji.");
+
+            warning.showAndWait();
+        }
+    }
+
+    @FXML
+    private void deleteRecords() {
+        List<GoodsWrapper> goodsToDelete = goodsTV.getSelectionModel().getSelectedItems();
+        Alert deleteDialog = AlertUtil
+                .createConfirmationAlert("Potwierdzenie usuniÄ™cia rekordÃ³w",
+                        "Czy napewno chcesz usunÄ…Ä‡ nastÄ™pujÄ…cÄ… liczbÄ™ rekordÃ³w: "
+                        + goodsToDelete.size());
+
+        Optional<ButtonType> result = deleteDialog.showAndWait();
+        if (result.get().equals(ButtonType.OK)) {
+            boolean deleteSuccess = goodsService.deleteData(goodsToDelete);
+            
+            if (!deleteSuccess) {
+                Alert error = AlertUtil.createErrorAlert("Niepowodzenie usuwania",
+                        "WystÄ…piÅ‚ bÅ‚Ä…d podczas prÃ³by usuniÄ™cia rekordÃ³w z bazy.");
+
+                error.showAndWait();
+            } else {
+                obsGoods.removeAll(goodsToDelete);
+            }
+        }
+    }
     
+    @FXML
+    private void filterGoods() {
+        //TODO add filtering
+        obsGoods.clear();
+        obsGoods.addAll(goodsService
+                .filterByIndex1(searchTF.getText()));
+        if(obsGoods.isEmpty()) {
+            Alert warning = AlertUtil.createWarningAlert("Rekord nie został znaleziony", 
+                    "Rekord o podanym indeksie nie istnieje w bazie danych.");
+            warning.showAndWait();
+        }
+    }
+    
+    @FXML
+    private void clearFilter() {
+        //TODO clear filter
+        searchTF.setText("");
+        populateData();
+    }
+
     private void setBingings() {
         index1TC.setCellValueFactory(cellData -> cellData.getValue().index1Property());
         index2TC.setCellValueFactory(cellData -> cellData.getValue().index2Property());
@@ -84,30 +174,30 @@ public class GoodsController implements Initializable {
         quantityTC.setCellValueFactory(cellData -> cellData.getValue().quantityProperty());
         priceTC.setCellValueFactory(cellData -> cellData.getValue().priceProperty());
     }
-    
+
     public void populateData() {
-        GoodsListDto goodsListDto = new GoodsListDto();
-        Client client = restUtil.getAuthorizedClient();
-        
-        //WebResource webResource = client.resource(RestUtil.URL + "goods/all");
-        
-        ClientResponse response = RestUtil.generateRestGetResponse(client, "goods/all");
-                //webResource.accept(MediaType.APPLICATION_XML).get(ClientResponse.class);
-        
-        if(RestUtil.responseHasErrors(response)) {
-            logger.error("Error getting all goods from database. Error status: " + response.getClientResponseStatus().getStatusCode());
-        } else {
-            logger.info("Populating all goods from database.");
-            
-            goodsListDto = response.getEntity(GoodsListDto.class);
-        }
-        
-        ObservableList<GoodsWrapper> obsGoods = FXCollections.observableArrayList();
-        for (Goods goods : goodsListDto.getList()) {
-            GoodsWrapper goodsWrapper = new GoodsWrapper(goods);
-            obsGoods.add(goodsWrapper);
-        }
-        
+        obsGoods = goodsService.populateAllGoods();
         goodsTV.setItems(obsGoods);
+    }
+
+    private void initAddGoodsWindow() {
+        try (InputStream addGoodsFXML = getClass().getResourceAsStream("/fxml/AddGoods.fxml")) {
+            addGoodsRoot = addGoodsLoader.load(addGoodsFXML);
+
+            addGoodsStage = new Stage();
+            addGoodsStage.setTitle("Faktury");
+            addGoodsStage.initOwner(stage);
+            addGoodsStage.initModality(Modality.APPLICATION_MODAL);
+            addGoodsStage.setResizable(false);
+
+            addGoodsScene = new Scene(addGoodsRoot);
+            addGoodsStage.setScene(addGoodsScene);
+
+            addGoodsController = addGoodsLoader.getController();
+            addGoodsController.setStage(addGoodsStage);
+        } catch (IOException ex) {
+            logger.error("Error reading AddGoods.fxml file.");
+            logger.error(ex.getMessage());
+        }
     }
 }

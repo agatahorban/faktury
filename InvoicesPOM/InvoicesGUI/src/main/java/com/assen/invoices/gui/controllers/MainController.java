@@ -16,7 +16,6 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  *
  * @author Arek
@@ -39,12 +38,12 @@ public class MainController implements Initializable {
 
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
+    @Inject
     private FXMLLoader goodsLoader;
     private Parent goodsRoot;
     private Scene goodsScene;
     private Stage goodsStage;
     private GoodsController goodsController;
-
 
     public Stage getStage() {
         return stage;
@@ -57,7 +56,7 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initContractorsWindow();
-		initGoodsWindow();
+        initGoodsWindow();
     }
 
     private void initContractorsWindow() {
@@ -72,19 +71,18 @@ public class MainController implements Initializable {
             contractorController = contractorLoader.getController();
             contractorController.setStage(contractorStage);
         } catch (IOException ex) {
-            logger.error("Error reading Main.fxml file.");
+            logger.error("Error reading Contractors.fxml file.");
             logger.error(ex.getMessage());
         }
     }
-    
+
     @FXML
-    private void loadContractorScene(){
+    private void loadContractorScene() {
         currentContentSP.getChildren().clear();
         contractorController.generateData();
         currentContentSP.getChildren().add(contractorRoot);
-        
+
     }
-    
 
     private void initGoodsWindow() {
         try (InputStream goodsFXML = getClass().getResourceAsStream("/fxml/Goods.fxml")) {
@@ -99,8 +97,8 @@ public class MainController implements Initializable {
             goodsController = goodsLoader.getController();
             goodsController.setStage(stage);
         } catch (IOException ex) {
-//            logger.error("Error reading Goods.fxml file.");
-//            logger.error(ex.getMessage());
+            logger.error("Error reading Goods.fxml file.");
+            logger.error(ex.getMessage());
         }
 
     }
