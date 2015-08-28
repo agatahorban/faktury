@@ -16,4 +16,5 @@ public interface IGoodsService {
     Goods insertNewGoods(Goods goods);
     Goods updateGoods(Goods goods);
     boolean removeGoods(GoodsListDto goodsList);
+    Goods findGoodsByIndex1(String index1);
 }

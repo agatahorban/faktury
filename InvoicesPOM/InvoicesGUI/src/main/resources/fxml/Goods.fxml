@@ -44,6 +44,20 @@
                                     <Insets left="5.0" />
                                  </GridPane.margin>
                               </TextField>
+                              <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2">
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#filterGoods" text="Szukaj">
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button mnemonicParsing="false" onAction="#clearFilter" text="Wyczyść">
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                 </children>
+                              </HBox>
                            </children>
                         </GridPane>
                         <TableView fx:id="goodsTV" prefHeight="200.0" prefWidth="200.0" tableMenuButtonVisible="true" VBox.vgrow="ALWAYS">

@@ -246,4 +246,22 @@ public class GoodsService implements IGoodsService {
         
         return obsGoods;
     }
+
+    @Override
+    public ObservableList<GoodsWrapper> filterByIndex1(String index1) {
+        ObservableList<GoodsWrapper> result = FXCollections.observableArrayList();
+        Client client = restUtil.getAuthorizedClient();
+        
+        ClientResponse response = RestUtil.generateRestPost(client, "goods/findByIndex1", index1);
+//        ClientResponse response = RestUtil.generateRestGet(client, "goods/findByIndex1/" + index1);
+        
+        if(RestUtil.responseHasErrors(response)) {
+            logger.error("Index1 not found in database: " + index1);
+        } else {
+            Goods filteredRecord = response.getEntity(Goods.class);
+            GoodsWrapper record = new GoodsWrapper(filteredRecord);
+            result.add(record);
+        }
+        return result;
+    }
 }

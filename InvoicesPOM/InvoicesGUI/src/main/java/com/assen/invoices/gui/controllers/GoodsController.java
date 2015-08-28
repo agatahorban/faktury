@@ -112,7 +112,7 @@ public class GoodsController implements Initializable {
             goodsTV.getColumns().get(0).setVisible(true);
         } else {
             Alert warning = AlertUtil.createWarningAlert("Brak zaznaczonego rekordu",
-                    "Proszę wybrać towar do edycji.");
+                    "ProszÄ™ wybraÄ‡ towar do edycji.");
 
             warning.showAndWait();
         }
@@ -122,8 +122,8 @@ public class GoodsController implements Initializable {
     private void deleteRecords() {
         List<GoodsWrapper> goodsToDelete = goodsTV.getSelectionModel().getSelectedItems();
         Alert deleteDialog = AlertUtil
-                .createConfirmationAlert("Potwierdzenie usunięcia rekordów",
-                        "Czy napewno chcesz usunąć następującą liczbę rekordów: "
+                .createConfirmationAlert("Potwierdzenie usuniÄ™cia rekordÃ³w",
+                        "Czy napewno chcesz usunÄ…Ä‡ nastÄ™pujÄ…cÄ… liczbÄ™ rekordÃ³w: "
                         + goodsToDelete.size());
 
         Optional<ButtonType> result = deleteDialog.showAndWait();
@@ -132,13 +132,33 @@ public class GoodsController implements Initializable {
             
             if (!deleteSuccess) {
                 Alert error = AlertUtil.createErrorAlert("Niepowodzenie usuwania",
-                        "Wystąpił błąd podczas próby usunięcia rekordów z bazy.");
+                        "WystÄ…piÅ‚ bÅ‚Ä…d podczas prÃ³by usuniÄ™cia rekordÃ³w z bazy.");
 
                 error.showAndWait();
             } else {
                 obsGoods.removeAll(goodsToDelete);
             }
         }
+    }
+    
+    @FXML
+    private void filterGoods() {
+        //TODO add filtering
+        obsGoods.clear();
+        obsGoods.addAll(goodsService
+                .filterByIndex1(searchTF.getText()));
+        if(obsGoods.isEmpty()) {
+            Alert warning = AlertUtil.createWarningAlert("Rekord nie został znaleziony", 
+                    "Rekord o podanym indeksie nie istnieje w bazie danych.");
+            warning.showAndWait();
+        }
+    }
+    
+    @FXML
+    private void clearFilter() {
+        //TODO clear filter
+        searchTF.setText("");
+        populateData();
     }
 
     private void setBingings() {

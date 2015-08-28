@@ -78,4 +78,17 @@ public class GoodsController {
             return Response.serverError().build();
         }
     }
+    
+    @POST
+    @Path("/findByIndex1")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_XML)
+    public Response filterGoodsByIndex1(String index1) {
+        Goods filterResult = goodsService.findGoodsByIndex1(index1);
+        if (filterResult != null) {
+            return Response.ok().entity(filterResult).build();
+        } else {
+            return Response.serverError().build();
+        }
+    }
 }

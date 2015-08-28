@@ -1,5 +1,6 @@
 package com.assen.invoices.gui.services.api;
 
+import com.assen.invoices.entities.Goods;
 import com.assen.invoices.gui.model.wrappers.GoodsWrapper;
 import com.assen.invoices.gui.validators.GoodsValidator;
 import java.util.List;
@@ -20,6 +21,8 @@ public interface IGoodsService {
     boolean deleteData(List<GoodsWrapper> goodsToDelete);
     
     ObservableList<GoodsWrapper> populateAllGoods();
+    
+    ObservableList<GoodsWrapper> filterByIndex1(String index1);
     
     public enum DataType {
 

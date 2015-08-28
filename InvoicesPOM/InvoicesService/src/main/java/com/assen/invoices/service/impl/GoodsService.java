@@ -66,4 +66,13 @@ public class GoodsService implements IGoodsService {
         }
         return true;
     }
+
+    @Override
+    public Goods findGoodsByIndex1(String index1) {
+        List<Goods> filteredGoods = goodsDao.findByIndex1(index1);
+        if(filteredGoods.isEmpty()) {
+            return null;
+        }
+        return filteredGoods.get(0);
+    }
 }

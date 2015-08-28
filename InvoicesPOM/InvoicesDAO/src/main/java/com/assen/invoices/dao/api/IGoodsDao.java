@@ -1,6 +1,7 @@
 package com.assen.invoices.dao.api;
 
 import com.assen.invoices.entities.Goods;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -10,4 +11,5 @@ import javax.ejb.Local;
 @Local
 public interface IGoodsDao extends ICrudDao<Goods> {
 
+    List<Goods> findByIndex1(String index1);
 }
