@@ -12,4 +12,6 @@ import javax.ejb.Local;
 public interface IGoodsDao extends ICrudDao<Goods> {
 
     List<Goods> findByIndex1(String index1);
+    List<Goods> findByContractor(String cutName);
+    List<Goods> findByGroup(String groupName);
 }

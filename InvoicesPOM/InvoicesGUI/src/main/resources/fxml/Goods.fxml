@@ -22,7 +22,7 @@
             </Label>
             <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
                <children>
-                  <TreeView prefHeight="400.0" prefWidth="188.0" />
+                  <TreeView fx:id="contractorGroupTrV" prefHeight="400.0" prefWidth="188.0" />
                   <VBox prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
                      <children>
                         <GridPane prefHeight="22.0" prefWidth="412.0">

@@ -3,6 +3,7 @@ package com.assen.invoices.gui.controllers;
 import com.assen.invoices.gui.controllers.add.AddGoodsController;
 import com.assen.invoices.gui.model.wrappers.GoodsWrapper;
 import com.assen.invoices.gui.services.api.IGoodsService;
+import com.assen.invoices.gui.services.impl.GoodsService;
 import com.assen.invoices.gui.utils.AlertUtil;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +11,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +25,8 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javax.inject.Inject;
@@ -39,6 +44,8 @@ public class GoodsController implements Initializable {
 
     @FXML
     private TextField searchTF;
+    @FXML
+    private TreeView<String> contractorGroupTrV;
 
     @FXML
     private TableView<GoodsWrapper> goodsTV;
@@ -79,6 +86,20 @@ public class GoodsController implements Initializable {
         goodsTV.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         setBingings();
         initAddGoodsWindow();
+
+        contractorGroupTrV.getSelectionModel()
+                .selectedItemProperty().addListener(new ChangeListener() {
+                    //TODO filter by group or contractor
+                    @Override
+                    public void changed(ObservableValue observable, Object oldValue,
+                            Object newValue) {
+                        if (((TreeItem<String>) newValue).getParent() != null) {
+                            obsGoods = goodsService.filterByGroupOrContractor(newValue);
+                        } else {
+                            populateTreeView();
+                        }
+                    }
+                });
     }
 
     public Stage getStage() {
@@ -129,7 +150,7 @@ public class GoodsController implements Initializable {
         Optional<ButtonType> result = deleteDialog.showAndWait();
         if (result.get().equals(ButtonType.OK)) {
             boolean deleteSuccess = goodsService.deleteData(goodsToDelete);
-            
+
             if (!deleteSuccess) {
                 Alert error = AlertUtil.createErrorAlert("Niepowodzenie usuwania",
                         "WystÄ…piÅ‚ bÅ‚Ä…d podczas prÃ³by usuniÄ™cia rekordÃ³w z bazy.");
@@ -140,23 +161,21 @@ public class GoodsController implements Initializable {
             }
         }
     }
-    
+
     @FXML
     private void filterGoods() {
-        //TODO add filtering
         obsGoods.clear();
         obsGoods.addAll(goodsService
                 .filterByIndex1(searchTF.getText()));
-        if(obsGoods.isEmpty()) {
-            Alert warning = AlertUtil.createWarningAlert("Rekord nie został znaleziony", 
+        if (obsGoods.isEmpty()) {
+            Alert warning = AlertUtil.createWarningAlert("Rekord nie został znaleziony",
                     "Rekord o podanym indeksie nie istnieje w bazie danych.");
             warning.showAndWait();
         }
     }
-    
+
     @FXML
     private void clearFilter() {
-        //TODO clear filter
         searchTF.setText("");
         populateData();
     }
@@ -178,6 +197,11 @@ public class GoodsController implements Initializable {
     public void populateData() {
         obsGoods = goodsService.populateAllGoods();
         goodsTV.setItems(obsGoods);
+        populateTreeView();
+    }
+
+    private void populateTreeView() {
+        contractorGroupTrV.setRoot(goodsService.generateRootView());
     }
 
     private void initAddGoodsWindow() {

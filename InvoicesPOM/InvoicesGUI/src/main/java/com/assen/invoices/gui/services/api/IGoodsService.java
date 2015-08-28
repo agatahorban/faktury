@@ -5,6 +5,7 @@ import com.assen.invoices.gui.model.wrappers.GoodsWrapper;
 import com.assen.invoices.gui.validators.GoodsValidator;
 import java.util.List;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TreeItem;
 
 /**
  *
@@ -23,6 +24,10 @@ public interface IGoodsService {
     ObservableList<GoodsWrapper> populateAllGoods();
     
     ObservableList<GoodsWrapper> filterByIndex1(String index1);
+    
+    TreeItem<String> generateRootView();
+    
+    ObservableList<GoodsWrapper> filterByGroupOrContractor(Object filterOption);
     
     public enum DataType {
 
