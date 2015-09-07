@@ -8,6 +8,7 @@ import com.assen.invoices.gui.services.api.IGoodsService.DataType;
 import com.assen.invoices.gui.utils.PropertiesUtil;
 import com.assen.invoices.gui.utils.RestUtil;
 import com.assen.invoices.gui.validators.GoodsValidator;
+import com.assen.invoices.gui.validators.NumberTextFieldValidator;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import java.net.URL;
@@ -36,9 +37,6 @@ public class AddGoodsController implements Initializable {
 
     private static final Logger logger = LoggerFactory.getLogger(GoodsController.class);
     private final PropertiesUtil props = new PropertiesUtil("messages.properties");
-
-    private static final String QUANTITY_REGEX = "1234567890";
-    private static final String PRICE_REGEX = "1234567890,.";
 
     @FXML
     private TextField index1TF;
@@ -160,21 +158,10 @@ public class AddGoodsController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         isEdit = false;
         quantityTF.addEventFilter(KeyEvent.KEY_TYPED, (KeyEvent event) -> {
-            if (!QUANTITY_REGEX.contains(event.getCharacter())) {
-                event.consume();
-            }
+            NumberTextFieldValidator.checkQuantityField(event);
         });
         priceTF.addEventFilter(KeyEvent.KEY_TYPED, (KeyEvent event) -> {
-            if (priceTF.getText().length() < 1) {
-                if (!QUANTITY_REGEX.contains(event.getCharacter())) {
-                    event.consume();
-                }
-            } else if ((event.getCharacter().equals(",") || event.getCharacter().equals(".")) 
-                    && (priceTF.getText().contains(",") || priceTF.getText().contains("."))) {
-                event.consume();
-            } else if (!PRICE_REGEX.contains(event.getCharacter())) {
-                event.consume();
-            }
+            NumberTextFieldValidator.checkPriceField(event, priceTF.getText());
         });
     }
 
