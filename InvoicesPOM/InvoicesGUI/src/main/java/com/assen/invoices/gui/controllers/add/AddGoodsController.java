@@ -5,6 +5,7 @@ import com.assen.invoices.gui.controllers.GoodsController;
 import com.assen.invoices.gui.model.wrappers.GoodsWrapper;
 import com.assen.invoices.gui.services.api.IGoodsService;
 import com.assen.invoices.gui.services.api.IGoodsService.DataType;
+import com.assen.invoices.gui.utils.PropertiesUtil;
 import com.assen.invoices.gui.utils.RestUtil;
 import com.assen.invoices.gui.validators.GoodsValidator;
 import com.sun.jersey.api.client.Client;
@@ -19,6 +20,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import javafx.util.converter.NumberStringConverter;
 import javax.inject.Inject;
@@ -33,6 +35,10 @@ import org.slf4j.LoggerFactory;
 public class AddGoodsController implements Initializable {
 
     private static final Logger logger = LoggerFactory.getLogger(GoodsController.class);
+    private final PropertiesUtil props = new PropertiesUtil("messages.properties");
+
+    private static final String QUANTITY_REGEX = "1234567890";
+    private static final String PRICE_REGEX = "1234567890,.";
 
     @FXML
     private TextField index1TF;
@@ -153,15 +159,32 @@ public class AddGoodsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         isEdit = false;
+        quantityTF.addEventFilter(KeyEvent.KEY_TYPED, (KeyEvent event) -> {
+            if (!QUANTITY_REGEX.contains(event.getCharacter())) {
+                event.consume();
+            }
+        });
+        priceTF.addEventFilter(KeyEvent.KEY_TYPED, (KeyEvent event) -> {
+            if (priceTF.getText().length() < 1) {
+                if (!QUANTITY_REGEX.contains(event.getCharacter())) {
+                    event.consume();
+                }
+            } else if ((event.getCharacter().equals(",") || event.getCharacter().equals(".")) 
+                    && (priceTF.getText().contains(",") || priceTF.getText().contains("."))) {
+                event.consume();
+            } else if (!PRICE_REGEX.contains(event.getCharacter())) {
+                event.consume();
+            }
+        });
     }
 
     public void populateReferencedData() {
         if (!isEdit) {
             setGoods(new GoodsWrapper(new Goods()));
-            addEditButton.setText("Dodaj");
+            addEditButton.setText(props.getProperty("goods.add.button"));
             clearButton.setVisible(true);
         } else {
-            addEditButton.setText("Edytuj");
+            addEditButton.setText(props.getProperty("goods.edit.button"));
             clearButton.setVisible(false);
         }
 

@@ -3,11 +3,12 @@ package com.assen.invoices.gui.controllers;
 import com.assen.invoices.gui.controllers.add.AddGoodsController;
 import com.assen.invoices.gui.model.wrappers.GoodsWrapper;
 import com.assen.invoices.gui.services.api.IGoodsService;
-import com.assen.invoices.gui.services.impl.GoodsService;
 import com.assen.invoices.gui.utils.AlertUtil;
+import com.assen.invoices.gui.utils.PropertiesUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -21,6 +22,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -41,6 +44,7 @@ import org.slf4j.LoggerFactory;
 public class GoodsController implements Initializable {
 
     private static final Logger logger = LoggerFactory.getLogger(GoodsController.class);
+    private final PropertiesUtil props = new PropertiesUtil("messages.properties");
 
     @FXML
     private TextField searchTF;
@@ -70,7 +74,7 @@ public class GoodsController implements Initializable {
 
     @Inject
     private IGoodsService goodsService;
-
+    
     private Stage stage;
 
     @Inject
@@ -84,12 +88,12 @@ public class GoodsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         goodsTV.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        goodsTV.setContextMenu(createTableViewContextMenu());
         setBingings();
         initAddGoodsWindow();
 
         contractorGroupTrV.getSelectionModel()
                 .selectedItemProperty().addListener(new ChangeListener() {
-                    //TODO filter by group or contractor
                     @Override
                     public void changed(ObservableValue observable, Object oldValue,
                             Object newValue) {
@@ -132,8 +136,8 @@ public class GoodsController implements Initializable {
             goodsTV.getColumns().get(0).setVisible(false);
             goodsTV.getColumns().get(0).setVisible(true);
         } else {
-            Alert warning = AlertUtil.createWarningAlert("Brak zaznaczonego rekordu",
-                    "ProszÄ™ wybraÄ‡ towar do edycji.");
+            Alert warning = AlertUtil.createWarningAlert(props.getProperty("goods.edit.warning.title"),
+                    props.getProperty("goods.edit.warning.body"));
 
             warning.showAndWait();
         }
@@ -143,17 +147,17 @@ public class GoodsController implements Initializable {
     private void deleteRecords() {
         List<GoodsWrapper> goodsToDelete = goodsTV.getSelectionModel().getSelectedItems();
         Alert deleteDialog = AlertUtil
-                .createConfirmationAlert("Potwierdzenie usuniÄ™cia rekordÃ³w",
-                        "Czy napewno chcesz usunÄ…Ä‡ nastÄ™pujÄ…cÄ… liczbÄ™ rekordÃ³w: "
-                        + goodsToDelete.size());
+                .createConfirmationAlert(props.getProperty("goods.delete.confirmation.title"),
+                        MessageFormat.format(props.getProperty("goods.delete.confirmation.body"), 
+                                goodsToDelete.size()));
 
         Optional<ButtonType> result = deleteDialog.showAndWait();
         if (result.get().equals(ButtonType.OK)) {
             boolean deleteSuccess = goodsService.deleteData(goodsToDelete);
 
             if (!deleteSuccess) {
-                Alert error = AlertUtil.createErrorAlert("Niepowodzenie usuwania",
-                        "WystÄ…piÅ‚ bÅ‚Ä…d podczas prÃ³by usuniÄ™cia rekordÃ³w z bazy.");
+                Alert error = AlertUtil.createErrorAlert(props.getProperty("goods.delete.error.title"),
+                        props.getProperty("goods.delete.error.body"));
 
                 error.showAndWait();
             } else {
@@ -168,8 +172,8 @@ public class GoodsController implements Initializable {
         obsGoods.addAll(goodsService
                 .filterByIndex1(searchTF.getText()));
         if (obsGoods.isEmpty()) {
-            Alert warning = AlertUtil.createWarningAlert("Rekord nie został znaleziony",
-                    "Rekord o podanym indeksie nie istnieje w bazie danych.");
+            Alert warning = AlertUtil.createWarningAlert(props.getProperty("goods.filter.warning.title"),
+                    props.getProperty("goods.filter.warning.body"));
             warning.showAndWait();
         }
     }
@@ -209,7 +213,7 @@ public class GoodsController implements Initializable {
             addGoodsRoot = addGoodsLoader.load(addGoodsFXML);
 
             addGoodsStage = new Stage();
-            addGoodsStage.setTitle("Faktury");
+            addGoodsStage.setTitle(props.getProperty("goods.add.window.title"));
             addGoodsStage.initOwner(stage);
             addGoodsStage.initModality(Modality.APPLICATION_MODAL);
             addGoodsStage.setResizable(false);
@@ -223,5 +227,15 @@ public class GoodsController implements Initializable {
             logger.error("Error reading AddGoods.fxml file.");
             logger.error(ex.getMessage());
         }
+    }
+    
+    private ContextMenu createTableViewContextMenu() {
+        MenuItem editMenu = new MenuItem(props.getProperty("goods.tableView.contextMenu.edit"));
+        editMenu.setOnAction((event) -> editGoods());
+        
+        MenuItem deleteMenu = new MenuItem(props.getProperty("goods.tableView.contextMenu.delete"));
+        deleteMenu.setOnAction((event) -> deleteRecords());
+        
+        return new ContextMenu(editMenu, deleteMenu);
     }
 }
