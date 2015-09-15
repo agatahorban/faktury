@@ -28,6 +28,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TreeItem;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,9 @@ public class GoodsService implements IGoodsService {
 
     private final ResettableCountDownLatch latch;
     private static final int LATCH_COUNT = 6;
+    public static final String CONTRACTORS_ROOT = "Kontrahenci";
+    public static final String GROUP_ROOT = "Grupy";
+    public static final String TREEVIEW_ROOT = "Wszyscy";
 
     private Map<String, CollectivePackage> collectivePackages;
     private Map<String, Group> groups;
@@ -230,7 +234,7 @@ public class GoodsService implements IGoodsService {
         ClientResponse response = RestUtil.generateRestGet(client, "goods/all");
 
         if (RestUtil.responseHasErrors(response)) {
-            logger.error("Error getting all goods from database. Error status: " 
+            logger.error("Error getting all goods from database. Error status: "
                     + response.getClientResponseStatus().getStatusCode());
         } else {
             logger.info("Populating all goods from database.");
@@ -243,7 +247,7 @@ public class GoodsService implements IGoodsService {
             GoodsWrapper goodsWrapper = new GoodsWrapper(goods);
             obsGoods.add(goodsWrapper);
         }
-        
+
         return obsGoods;
     }
 
@@ -251,11 +255,10 @@ public class GoodsService implements IGoodsService {
     public ObservableList<GoodsWrapper> filterByIndex1(String index1) {
         ObservableList<GoodsWrapper> result = FXCollections.observableArrayList();
         Client client = restUtil.getAuthorizedClient();
-        
+
         ClientResponse response = RestUtil.generateRestPost(client, "goods/findByIndex1", index1);
-//        ClientResponse response = RestUtil.generateRestGet(client, "goods/findByIndex1/" + index1);
-        
-        if(RestUtil.responseHasErrors(response)) {
+
+        if (RestUtil.responseHasErrors(response)) {
             logger.error("Index1 not found in database: " + index1);
         } else {
             Goods filteredRecord = response.getEntity(Goods.class);
@@ -263,5 +266,85 @@ public class GoodsService implements IGoodsService {
             result.add(record);
         }
         return result;
+    }
+
+    @Override
+    public TreeItem<String> generateRootView() {
+        TreeItem<String> root = new TreeItem<>(TREEVIEW_ROOT);
+        TreeItem<String> contractorsRoot = new TreeItem<>(CONTRACTORS_ROOT);
+        TreeItem<String> groupsRoot = new TreeItem<>(GROUP_ROOT);
+
+        Client client = restUtil.getAuthorizedClient();
+
+        ClientResponse contractorsResponse = RestUtil.generateRestGet(client, "contractors/all");
+        ClientResponse groupsResponse = RestUtil.generateRestGet(client, "groups/all");
+
+        if (RestUtil.responseHasErrors(contractorsResponse)) {
+            logger.error("Error generating TreeView for contractors");
+        } else {
+            ContractorListDto contractorsDto = contractorsResponse
+                    .getEntity(ContractorListDto.class);
+
+            contractorsDto.getList().stream().parallel().forEach((contractor) -> {
+                contractorsRoot.getChildren()
+                        .add(new TreeItem<>(contractor.getCutName()));
+            });
+        }
+
+        if (RestUtil.responseHasErrors(groupsResponse)) {
+            logger.error("Error generating TreeView for groups");
+        } else {
+            GroupListDto groupsDto = groupsResponse.getEntity(GroupListDto.class);
+
+            groupsDto.getGroups().stream().parallel().forEach((group) -> {
+                groupsRoot.getChildren().add(new TreeItem<>(group.getName()));
+            });
+        }
+
+        root.getChildren().addAll(contractorsRoot, groupsRoot);
+
+        contractorsRoot.setExpanded(true);
+        groupsRoot.setExpanded(true);
+        root.setExpanded(true);
+        return root;
+    }
+
+    @Override
+    public ObservableList<GoodsWrapper> filterByGroupOrContractor(Object filterOption) {
+        boolean contractorsOrGroups = false;
+        ObservableList<GoodsWrapper> filteredGoods = FXCollections.observableArrayList();
+        String parentValue = ((TreeItem<String>) filterOption).getParent().getValue();
+        if (parentValue.equals(CONTRACTORS_ROOT)) {
+            contractorsOrGroups = true;
+        }
+        String selectedValue = ((TreeItem<String>) filterOption).getValue();
+        logger.info("Selected value: " + selectedValue);
+        if (notEqualsToContractorsOrGroups(selectedValue)) {
+            if (contractorsOrGroups) {
+                filteredGoods = populateFilteredGoods(selectedValue, "goods/findByContractor");
+            } else {
+                filteredGoods = populateFilteredGoods(selectedValue, "goods/findByGroup");
+            }
+        }
+        return filteredGoods;
+    }
+
+    private ObservableList<GoodsWrapper> populateFilteredGoods(String filterValue, String restUrl) {
+        Client client = restUtil.getAuthorizedClient();
+        ObservableList<GoodsWrapper> result = FXCollections.observableArrayList();
+        ClientResponse response = RestUtil.generateRestPost(client, restUrl,
+                filterValue);
+
+        if (!RestUtil.responseHasErrors(response)) {
+            GoodsListDto goodsDto = response.getEntity(GoodsListDto.class);
+            goodsDto.getList().stream().parallel().forEach((goods) -> {
+                result.add(new GoodsWrapper(goods));
+            });
+        }
+        return result;
+    }
+
+    private boolean notEqualsToContractorsOrGroups(String selectedValue) {
+        return (!selectedValue.equals(CONTRACTORS_ROOT) && !selectedValue.equals(GROUP_ROOT));
     }
 }

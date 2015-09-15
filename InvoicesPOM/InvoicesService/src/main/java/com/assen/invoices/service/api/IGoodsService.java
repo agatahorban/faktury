@@ -17,4 +17,6 @@ public interface IGoodsService {
     Goods updateGoods(Goods goods);
     boolean removeGoods(GoodsListDto goodsList);
     Goods findGoodsByIndex1(String index1);
+    List<Goods> findGoodsByContractor(String cutName);
+    List<Goods> findGoodsByGroup(String group);
 }

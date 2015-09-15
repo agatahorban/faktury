@@ -78,7 +78,7 @@ public class GoodsController {
             return Response.serverError().build();
         }
     }
-    
+
     @POST
     @Path("/findByIndex1")
     @Consumes(MediaType.TEXT_PLAIN)
@@ -90,5 +90,25 @@ public class GoodsController {
         } else {
             return Response.serverError().build();
         }
+    }
+
+    @POST
+    @Path("/findByContractor")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_XML)
+    public Response filterGoodsByContractor(String cutName) {
+        List<Goods> filterResult = goodsService.findGoodsByContractor(cutName);
+        GoodsListDto filteredEntities = new GoodsListDto(filterResult);
+        return Response.ok().entity(filteredEntities).build();
+    }
+
+    @POST
+    @Path("/findByGroup")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_XML)
+    public Response filterGoodsByGroup(String name) {
+        List<Goods> filterResult = goodsService.findGoodsByGroup(name);
+        GoodsListDto filteredEntities = new GoodsListDto(filterResult);
+        return Response.ok().entity(filteredEntities).build();
     }
 }

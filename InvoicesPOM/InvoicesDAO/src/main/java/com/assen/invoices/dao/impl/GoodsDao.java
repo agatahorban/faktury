@@ -23,4 +23,18 @@ public class GoodsDao extends CrudDao<Goods> implements IGoodsDao {
         return query.getResultList();
     }
 
+    @Override
+    public List<Goods> findByContractor(String cutName) {
+        Query query = em.createQuery("SELECT g FROM Goods g WHERE g.supplier.cutName = :cutName")
+                .setParameter("cutName", cutName);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Goods> findByGroup(String groupName) {
+        Query query = em.createQuery("SELECT g FROM Goods g WHERE g.group.name = :groupName")
+                .setParameter("groupName", groupName);
+        return query.getResultList();
+    }
+
 }
