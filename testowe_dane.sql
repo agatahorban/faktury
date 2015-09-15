@@ -11,6 +11,10 @@ INSERT INTO role_( version, name) VALUES (1, 'PERM_COLLECTIVE_PACKAGE');
 INSERT INTO role_( version, name) VALUES (1, 'PERM_GROUP');
 INSERT INTO role_( version, name) VALUES (1, 'PERM_VAT_RATE');
 
+INSERT INTO role_( version, name) VALUES (1, 'PERM_CONTR');
+INSERT INTO role_( version, name) VALUES (1, 'PERM_PAYMENT_DATE');
+INSERT INTO role_( version, name) VALUES (1, 'PERM_PAYMENT_BANK');
+
 INSERT INTO group_(version, name) VALUES (1, 'Łódź');
 INSERT INTO collective_package(version, capacity, full_name, cut_name, depth, height, weight, width)
 			VALUES (1, 45, 'Podstawowe opakowanie', 'PO',1,1,1,1);
@@ -50,3 +54,19 @@ VALUES (
     (SELECT id FROM contractor WHERE cut_name = 'Mecalit'), 
     (SELECT id FROM unit_of_measure WHERE shortcut = 'szt')
 );
+
+CREATE OR REPLACE FUNCTION f_trig_cont() RETURNS trigger AS
+$$
+BEGIN
+delete from goods where supplier_id = OLD.id;
+RETURN OLD;
+END
+$$
+language plpgsql VOLATILE; 
+
+CREATE TRIGGER trig_cont
+BEFORE DELETE 
+ON contractor
+FOR EACH ROW
+EXECUTE PROCEDURE f_trig_cont();
+RETURN OLD;

@@ -44,14 +44,14 @@
                   <Label text="Nazwa pełna:" GridPane.rowIndex="1" />
                   <Label text="Nazwa skrócona:" GridPane.rowIndex="2" />
                   <Label text="NIP" GridPane.rowIndex="3" />
-                  <CheckBox mnemonicParsing="false" text="czy płatnik VAT" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                  <CheckBox fx:id="vatPayerCB" mnemonicParsing="false" text="czy płatnik VAT" GridPane.columnIndex="1" GridPane.rowIndex="4">
                      <GridPane.margin>
                         <Insets left="90.0" />
                      </GridPane.margin>
                   </CheckBox>
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField fx:id="fullnameTF" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="cutnameTF" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="nipTF" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                </children>
             </GridPane>
             <Separator prefHeight="13.0" prefWidth="587.0" GridPane.rowIndex="1" />
@@ -83,13 +83,13 @@
                         <Label text="Ulica:" />
                         <Label text="Nr domu:" GridPane.columnIndex="2" />
                         <Label text="Nr lokalu" GridPane.columnIndex="4" />
-                        <TextField GridPane.columnIndex="1">
+                        <TextField fx:id="streetTF" GridPane.columnIndex="1">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
                         </TextField>
-                        <TextField GridPane.columnIndex="5" />
-                        <TextField GridPane.columnIndex="3">
+                        <TextField fx:id="apartmentNameTF" GridPane.columnIndex="5" />
+                        <TextField fx:id="houseNumberTF" GridPane.columnIndex="3">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
@@ -107,13 +107,13 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <TextField GridPane.columnIndex="3">
+                        <TextField fx:id="townTF" GridPane.columnIndex="3">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
                         </TextField>
                         <Label text="Kod pocztow:y" />
-                        <TextField GridPane.columnIndex="1">
+                        <TextField fx:id="postalCodeTF" GridPane.columnIndex="1">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
@@ -137,17 +137,17 @@
                         <Label text="Województwo:" />
                         <Label text="Gmina:" GridPane.columnIndex="4" />
                         <Label text="Powiat:" GridPane.columnIndex="2" />
-                        <TextField GridPane.columnIndex="5">
+                        <TextField fx:id="boroughTF" GridPane.columnIndex="5">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
                         </TextField>
-                        <TextField GridPane.columnIndex="3">
+                        <TextField fx:id="countyTF" GridPane.columnIndex="3">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
                         </TextField>
-                        <ChoiceBox prefWidth="150.0" GridPane.columnIndex="1">
+                        <ChoiceBox fx:id="provinceCB" prefWidth="150.0" GridPane.columnIndex="1">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
@@ -168,12 +168,12 @@
               </rowConstraints>
                <children>
                   <Label text="Typ" textFill="#1a119a" />
-                  <CheckBox mnemonicParsing="false" text="Odbiorca" GridPane.rowIndex="1">
+                  <CheckBox fx:id="addresseeCB" mnemonicParsing="false" text="Odbiorca" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets left="10.0" />
                      </GridPane.margin>
                   </CheckBox>
-                  <CheckBox mnemonicParsing="false" text="Dostawca" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <CheckBox fx:id="supplierCB" mnemonicParsing="false" text="Dostawca" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>
             </GridPane>
             <Separator prefWidth="200.0" GridPane.rowIndex="6" />
@@ -200,12 +200,12 @@
                         <Insets left="20.0" />
                      </padding>
                   </Label>
-                  <ChoiceBox prefHeight="25.0" prefWidth="198.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                  <ChoiceBox fx:id="paymentDateChB" prefHeight="25.0" prefWidth="198.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets left="5.0" right="5.0" />
                      </GridPane.margin>
                   </ChoiceBox>
-                  <ChoiceBox prefHeight="25.0" prefWidth="237.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                  <ChoiceBox fx:id="bankChB" prefHeight="25.0" prefWidth="237.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets left="5.0" right="5.0" />
                      </GridPane.margin>
@@ -217,13 +217,13 @@
             </GridPane>
             <HBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="37.0" prefWidth="586.0" GridPane.rowIndex="10">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="50.0" text="Anuluj" />
-                  <Button mnemonicParsing="false" text="Wyczyść">
+                  <Button mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="50.0" text="Anuluj" />
+                  <Button fx:id="addEditButton" mnemonicParsing="false" onAction="#addOrEdit" prefHeight="18.0" prefWidth="48.0" text="Dodaj">
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" prefHeight="18.0" prefWidth="48.0" text="Dodaj">
+                  <Button fx:id="clearButton" mnemonicParsing="false" onAction="#clear" text="Wyczyść">
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>
@@ -233,7 +233,7 @@
                   <Insets top="40.0" />
                </GridPane.margin>
             </HBox>
-            <TextArea editable="false" prefHeight="47.0" prefWidth="589.0" text="testtesttesttes&#10;tetestetststs&#10;ststs&#10;tsts&#10;tstetesestes&#10;sedtset&#10;" wrapText="true" GridPane.rowIndex="9" />
+            <TextArea fx:id="errorsTA" editable="false" prefHeight="47.0" prefWidth="589.0" text="&#10;" wrapText="true" GridPane.rowIndex="9" />
             <Separator prefWidth="200.0" GridPane.rowIndex="8" />
          </children>
          <padding>

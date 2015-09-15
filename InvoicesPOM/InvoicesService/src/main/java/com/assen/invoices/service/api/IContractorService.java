@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.assen.invoices.service.api;
 
+import com.assen.invoices.dto.ContractorListDto;
 import com.assen.invoices.entities.Contractor;
 import java.util.List;
 import javax.ejb.Local;
@@ -17,4 +13,8 @@ import javax.ejb.Local;
 @Local
 public interface IContractorService {
     List<Contractor> findAllContractors();
+    Contractor insertNewContractors(Contractor contractor);
+    Contractor updateContractors(Contractor contractor);
+    boolean removeContractors(ContractorListDto contractorList);
+    Contractor findByCutName(String cutName);
 }

@@ -68,6 +68,35 @@ public class Contractor extends BasicEntity implements Serializable {
         bank = new Bank();
         paymentDate = new PaymentDate();
     }
+
+    public Contractor(boolean addressee, boolean supplier, boolean VATpayer, String cutName, String fullName, String NIP, Address address, Bank bank, PaymentDate paymentDate) {
+        this.addressee = addressee;
+        this.supplier = supplier;
+        this.VATpayer = VATpayer;
+        this.cutName = cutName;
+        this.fullName = fullName;
+        this.NIP = NIP;
+        this.address = address;
+        this.bank = bank;
+        this.paymentDate = paymentDate;
+    }
+    
+    
+     public static Contractor copyOf(Contractor contractor) {
+        Contractor newContractor = 
+                new Contractor(
+                        contractor.isAddressee(),
+                        contractor.isSupplier(),
+                        contractor.isVATpayer(),
+                        contractor.getCutName(),
+                        contractor.getFullName(),
+                        contractor.getNIP(),
+                        contractor.getAddress(),
+                        contractor.getBank(),
+                        contractor.getPaymentDate());
+
+        return newContractor;
+    }
     
     public boolean isAddressee() {
         return addressee;
