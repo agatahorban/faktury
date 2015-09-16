@@ -13,6 +13,8 @@ import javax.ejb.Local;
 public interface IUnitOfMeasureService {
 
     List<UnitOfMeasure> findAllUnitsOfMeasure();
-
     public boolean removeUnit(UnitOfMeasureListDto unitOfMeasureToDelete);
+    UnitOfMeasure insertNewUnit(UnitOfMeasure unit);
+    UnitOfMeasure updateUnit(UnitOfMeasure unit);
+    
 }

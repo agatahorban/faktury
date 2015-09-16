@@ -45,4 +45,29 @@ public class UnitOfMeasureService implements IUnitOfMeasureService {
         return true;
     }
 
+    @Override
+    public UnitOfMeasure insertNewUnit(UnitOfMeasure unit) {
+        logger.info("Inserting new units to database: " + unit.getShortcut());
+        try {
+            unit = unitOfMeasureDao.insert(unit);
+        } catch (Exception ex) {
+            logger.error("Error adding new unit to database. Error message: " + ex.getMessage());
+            return null;
+        }
+        return unit;
+    }
+
+    @Override
+    public UnitOfMeasure updateUnit(UnitOfMeasure unit) {
+         logger.info("Updating unit values: " + unit.getShortcut());
+        try {
+            unit = unitOfMeasureDao.update(unit);
+        } catch (Exception ex) {
+            logger.error("Error updating unit data. Unit: " + unit.getId()
+                    + ", error message: " + ex.getMessage());
+            return null;
+        }
+        return unit;
+    }
+
 }

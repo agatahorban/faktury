@@ -132,7 +132,7 @@ public class AddUnitController implements Initializable {
         String errors = unitOfMeasureService.validData(unit);
 
         if (!errors.equals("")) {
-            logger.info("Invalid Goods data: " + errors);
+            logger.info("Invalid Unit Of Measure data: " + errors);
             errorsTA.appendText(errors);
             return false;
         }
