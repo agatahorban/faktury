@@ -5,8 +5,11 @@ import com.assen.invoices.entities.UnitOfMeasure;
 import com.assen.invoices.gui.model.wrappers.UnitOfMeasureWrapper;
 import com.assen.invoices.gui.services.api.IUnitOfMeasureService;
 import com.assen.invoices.gui.utils.RestUtil;
+import com.assen.invoices.gui.validators.UnitOfMeasureValidator;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javax.inject.Inject;
@@ -46,6 +49,32 @@ public class UnitOfMeasureService implements IUnitOfMeasureService {
         }
 
         return obsUnits;
+    }
+    
+     @Override
+    public boolean deleteData(List<UnitOfMeasureWrapper> unitOfMeasureToDelete) {
+        logger.info("Deleting " + unitOfMeasureToDelete.size() + " unit of measure records.");
+        List<UnitOfMeasure> unitsDelete = new ArrayList<>();
+        unitOfMeasureToDelete.stream().parallel().forEach((unitsDelete1) -> {
+            unitsDelete.add(unitsDelete1.getUnitOfMeasure());
+        });
+
+        Client client = restUtil.getAuthorizedClient();
+
+        UnitOfMeasureListDto entitiesToDelete = new UnitOfMeasureListDto(unitsDelete);
+        ClientResponse response = RestUtil.generateRestPost(client,
+                "unitsOfMeasure/delete", entitiesToDelete);
+        if (RestUtil.responseHasErrors(response)) {
+            logger.error("Error deadmileting goods from database.");
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String validData(UnitOfMeasureWrapper unit) {
+           UnitOfMeasureValidator validator = new UnitOfMeasureValidator();
+        return validator.validateData(unit);
     }
 
 }

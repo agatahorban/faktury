@@ -47,7 +47,7 @@
                <children>
                   <HBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button mnemonicParsing="false" text="Usuń">
+                        <Button mnemonicParsing="false" onAction="#deleteRecords" text="Usuń">
                            <HBox.margin>
                               <Insets left="20.0" />
                            </HBox.margin>
@@ -57,7 +57,7 @@
                               <Insets left="20.0" />
                            </HBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" text="Dodaj">
+                        <Button mnemonicParsing="false" text="Dodaj" onAction="#addNewRecord">
                            <HBox.margin>
                               <Insets left="20.0" />
                            </HBox.margin>

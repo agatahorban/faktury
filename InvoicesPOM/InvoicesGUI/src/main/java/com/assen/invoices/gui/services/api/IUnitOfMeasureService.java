@@ -6,6 +6,7 @@
 package com.assen.invoices.gui.services.api;
 
 import com.assen.invoices.gui.model.wrappers.UnitOfMeasureWrapper;
+import java.util.List;
 import javafx.collections.ObservableList;
 
 /**
@@ -15,5 +16,6 @@ import javafx.collections.ObservableList;
 public interface IUnitOfMeasureService {
 
     public ObservableList<UnitOfMeasureWrapper> populateAllUnits();
-    
+    public boolean deleteData(List<UnitOfMeasureWrapper> unitOfMeasureToDelete);
+    public String validData(UnitOfMeasureWrapper unit);
 }

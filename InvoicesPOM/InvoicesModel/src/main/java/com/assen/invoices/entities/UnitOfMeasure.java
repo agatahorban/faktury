@@ -45,7 +45,13 @@ public class UnitOfMeasure extends BasicEntity implements Serializable {
         this.name = name;
     }
 
-   
+    public static UnitOfMeasure copyOf(UnitOfMeasure unitOfMeasure) {
+        UnitOfMeasure unitOfMeasure1 = new UnitOfMeasure();
+        unitOfMeasure1.setName(unitOfMeasure.getName());
+        unitOfMeasure1.setShortcut(unitOfMeasure.getShortcut());
+     
+        return unitOfMeasure1;
+    }
     
     
 }

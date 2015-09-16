@@ -23,6 +23,10 @@ public class UnitOfMeasureListDto {
         this.units = new ArrayList<>();
     }
 
+    public UnitOfMeasureListDto(List<UnitOfMeasure> units) {
+        this.units = units;
+    }
+
     public List<UnitOfMeasure> getUnits() {
         return units;
     }
