@@ -7,6 +7,7 @@ package com.assen.invoices.gui.controllers.add;
 
 import com.assen.invoices.entities.UnitOfMeasure;
 import com.assen.invoices.gui.model.wrappers.UnitOfMeasureWrapper;
+import com.assen.invoices.gui.services.api.IUnitOfMeasureService;
 import com.assen.invoices.gui.utils.PropertiesUtil;
 import com.assen.invoices.gui.utils.RestUtil;
 import com.sun.jersey.api.client.Client;
@@ -128,8 +129,7 @@ public class AddUnitController implements Initializable {
     }
 
      private boolean validData() {
-     
-        String errors = goodsService.validData(goods, validationData);
+        String errors = unitOfMeasureService.validData(unit);
 
         if (!errors.equals("")) {
             logger.info("Invalid Goods data: " + errors);
