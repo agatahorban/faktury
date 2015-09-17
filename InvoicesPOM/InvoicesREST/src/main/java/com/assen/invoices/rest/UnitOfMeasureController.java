@@ -34,18 +34,18 @@ public class UnitOfMeasureController {
     @GET
     @Path("/all")
     @Produces(MediaType.APPLICATION_XML)
-    public Response getAllCollectivePackages() {
-        List<UnitOfMeasure> allCollectivePackages = unitOfMeasureService.findAllUnitsOfMeasure();
-        UnitOfMeasureListDto collectivePackages = new UnitOfMeasureListDto();
-        collectivePackages.setUnits(allCollectivePackages);
-        return Response.ok().entity(collectivePackages).build();
+    public Response getAllUnitsOfMeasure() {
+        List<UnitOfMeasure> allUnitsOfMeasure = unitOfMeasureService.findAllUnitsOfMeasure();
+        UnitOfMeasureListDto unitsOfMeasure = new UnitOfMeasureListDto();
+        unitsOfMeasure.setUnits(allUnitsOfMeasure);
+        return Response.ok().entity(unitsOfMeasure).build();
     }
 
     @POST
     @Path("/delete")
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_XML)
-    public Response deleteGoods(UnitOfMeasureListDto unitOfMeasureToDelete) {
+    public Response deleteUnits(UnitOfMeasureListDto unitOfMeasureToDelete) {
         boolean deleteResult = unitOfMeasureService.removeUnit(unitOfMeasureToDelete);
         if (deleteResult) {
             return Response.ok().build();
@@ -75,6 +75,19 @@ public class UnitOfMeasureController {
         UnitOfMeasure updateResult = unitOfMeasureService.updateUnit(unit);
         if (updateResult != null) {
             return Response.ok().entity(updateResult).build();
+        } else {
+            return Response.serverError().build();
+        }
+    }
+    
+    @POST
+    @Path("/findByShortcut")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_XML)
+    public Response filterUnitsByShortcut(String shortcut) {
+        UnitOfMeasure filterResult = unitOfMeasureService.findUnitByShortcut(shortcut);
+        if (filterResult != null) {
+            return Response.ok().entity(filterResult).build();
         } else {
             return Response.serverError().build();
         }

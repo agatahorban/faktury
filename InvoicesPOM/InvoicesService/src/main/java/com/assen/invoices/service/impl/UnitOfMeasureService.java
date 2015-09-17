@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class UnitOfMeasureService implements IUnitOfMeasureService {
     
-    private static final Logger logger = LoggerFactory.getLogger(CollectivePackageService.class);
+    private static final Logger logger = LoggerFactory.getLogger(UnitOfMeasureService.class);
     
     @EJB
     private IUnitOfMeasureDao unitOfMeasureDao;
@@ -32,7 +32,7 @@ public class UnitOfMeasureService implements IUnitOfMeasureService {
 
     @Override
     public boolean removeUnit(UnitOfMeasureListDto unitOfMeasureToDelete) {
-         logger.info("Deleting goods from database: " + unitOfMeasureToDelete.getUnits().size());
+         logger.info("Deleting units of measure from database: " + unitOfMeasureToDelete.getUnits().size());
         try {
             unitOfMeasureToDelete.getUnits().stream().parallel().forEach((unitOfMeasureToDeletee) -> {
                 unitOfMeasureDao.remove(unitOfMeasureToDeletee);
@@ -68,6 +68,17 @@ public class UnitOfMeasureService implements IUnitOfMeasureService {
             return null;
         }
         return unit;
+    }
+
+    @Override
+    public UnitOfMeasure findUnitByShortcut(String shortcut) {
+         logger.info("Filtering unit by shortcut: " + shortcut);
+           List<UnitOfMeasure> filteredUnits = unitOfMeasureDao.findByShortcut(shortcut);
+        if(filteredUnits.isEmpty()) {
+            logger.info("No units found with shortcut: " + shortcut);
+            return null;
+        }
+        return filteredUnits.get(0);
     }
 
 }

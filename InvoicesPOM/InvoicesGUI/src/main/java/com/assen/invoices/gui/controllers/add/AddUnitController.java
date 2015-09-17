@@ -102,10 +102,10 @@ public class AddUnitController implements Initializable {
      public void populateReferencedData() {
         if (!isEdit) {
             setUnit(new UnitOfMeasureWrapper(new UnitOfMeasure()));
-            addEditButton.setText(props.getProperty("goods.add.button"));
+            addEditButton.setText(props.getProperty("units.add.button"));
             clearButton.setVisible(true);
         } else {
-            addEditButton.setText(props.getProperty("goods.edit.button"));
+            addEditButton.setText(props.getProperty("units.edit.button"));
             clearButton.setVisible(false);
         }
     }

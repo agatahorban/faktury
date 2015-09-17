@@ -1,6 +1,7 @@
 package com.assen.invoices.dao.api;
 
 import com.assen.invoices.entities.UnitOfMeasure;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -9,5 +10,5 @@ import javax.ejb.Local;
  */
 @Local
 public interface IUnitOfMeasureDao extends ICrudDao<UnitOfMeasure> {
-
+    List<UnitOfMeasure> findByShortcut(String shortcut);
 }

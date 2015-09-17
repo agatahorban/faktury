@@ -65,7 +65,7 @@ public class UnitOfMeasureService implements IUnitOfMeasureService {
         ClientResponse response = RestUtil.generateRestPost(client,
                 "unitsOfMeasure/delete", entitiesToDelete);
         if (RestUtil.responseHasErrors(response)) {
-            logger.error("Error deadmileting goods from database.");
+            logger.error("Error deleting units of measure from database.");
             return false;
         }
         return true;
@@ -75,6 +75,23 @@ public class UnitOfMeasureService implements IUnitOfMeasureService {
     public String validData(UnitOfMeasureWrapper unit) {
            UnitOfMeasureValidator validator = new UnitOfMeasureValidator();
         return validator.validateData(unit);
+    }
+
+    @Override
+    public ObservableList<UnitOfMeasureWrapper> filterByShortcut(String shortcut) {
+         ObservableList<UnitOfMeasureWrapper> result = FXCollections.observableArrayList();
+        Client client = restUtil.getAuthorizedClient();
+
+        ClientResponse response = RestUtil.generateRestPost(client, "unitsOfMeasure/findByShortcut", shortcut);
+
+        if (RestUtil.responseHasErrors(response)) {
+            logger.error("Shortcut not found in database: " + shortcut);
+        } else {
+            UnitOfMeasure filteredRecord = response.getEntity(UnitOfMeasure.class);
+            UnitOfMeasureWrapper record = new UnitOfMeasureWrapper(filteredRecord);
+            result.add(record);
+        }
+        return result;
     }
 
 }

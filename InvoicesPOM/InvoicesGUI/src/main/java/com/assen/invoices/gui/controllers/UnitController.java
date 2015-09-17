@@ -20,6 +20,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -40,23 +42,17 @@ public class UnitController implements Initializable {
 
     @FXML
     private TextField searchTF;
-
     @FXML
     private TableView<UnitOfMeasureWrapper> unitsTV;
-
     @FXML
     private TableColumn<UnitOfMeasureWrapper, String> nameTC;
-
     @FXML
     private TableColumn<UnitOfMeasureWrapper, String> shortcutTC;
-
     private ObservableList<UnitOfMeasureWrapper> obsUnits;
-
     @Inject
     private IUnitOfMeasureService unitOfMeasureService;
 
     private Stage stage;
-
     private final PropertiesUtil props = new PropertiesUtil("messages.properties");
 
     @Inject
@@ -70,6 +66,7 @@ public class UnitController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         unitsTV.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        unitsTV.setContextMenu(createTableViewContextMenu());
         setBingings();
         initAddUnitsWindow();
 
@@ -125,7 +122,7 @@ public class UnitController implements Initializable {
         addUnitsStage.show();
     }
 
-      @FXML
+    @FXML
     private void editUnits() {
         List<UnitOfMeasureWrapper> unitsToEdit = unitsTV.getSelectionModel().getSelectedItems();
         if (!unitsToEdit.isEmpty()) {
@@ -138,20 +135,19 @@ public class UnitController implements Initializable {
             unitsTV.getColumns().get(0).setVisible(false);
             unitsTV.getColumns().get(0).setVisible(true);
         } else {
-            Alert warning = AlertUtil.createWarningAlert(props.getProperty("goods.edit.warning.title"),
-                    props.getProperty("goods.edit.warning.body"));
+            Alert warning = AlertUtil.createWarningAlert(props.getProperty("units.edit.warning.title"),
+                    props.getProperty("units.edit.warning.body"));
 
             warning.showAndWait();
         }
     }
-    
-    
+
     private void initAddUnitsWindow() {
         try (InputStream addUnitsFXML = getClass().getResourceAsStream("/fxml/AddUnitOfMeasure.fxml")) {
             addUnitsRoot = addUnitsLoader.load(addUnitsFXML);
 
             addUnitsStage = new Stage();
-            addUnitsStage.setTitle(props.getProperty("goods.add.window.title"));
+            addUnitsStage.setTitle(props.getProperty("units.add.window.title"));
             addUnitsStage.initOwner(stage);
             addUnitsStage.initModality(Modality.APPLICATION_MODAL);
             addUnitsStage.setResizable(false);
@@ -165,5 +161,34 @@ public class UnitController implements Initializable {
             logger.error("Error reading AddUnitOfMeasure.fxml file.");
             logger.error(ex.getMessage());
         }
+    }
+
+    private ContextMenu createTableViewContextMenu() {
+        MenuItem editMenu = new MenuItem(props.getProperty("units.tableView.contextMenu.edit"));
+        editMenu.setOnAction((event) -> editUnits());
+
+        MenuItem deleteMenu = new MenuItem(props.getProperty("units.tableView.contextMenu.delete"));
+        deleteMenu.setOnAction((event) -> deleteRecords());
+
+        return new ContextMenu(editMenu, deleteMenu);
+    }
+
+    @FXML
+    private void filterUnits() {
+        System.out.println("Wszedlem do filter");
+        obsUnits.clear();
+        obsUnits.addAll(unitOfMeasureService
+                .filterByShortcut(searchTF.getText()));
+        if (obsUnits.isEmpty()) {
+            Alert warning = AlertUtil.createWarningAlert(props.getProperty("units.filter.warning.title"),
+                    props.getProperty("units.filter.warning.body"));
+            warning.showAndWait();
+        }
+    }
+
+    @FXML
+    private void clearFilter() {
+        searchTF.setText("");
+        populateData();
     }
 }

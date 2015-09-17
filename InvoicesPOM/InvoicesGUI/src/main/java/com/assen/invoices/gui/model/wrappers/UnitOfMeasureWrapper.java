@@ -56,7 +56,7 @@ public class UnitOfMeasureWrapper {
     
     private void setWrapperValues() {
         name = new SimpleStringProperty(unitOfMeasure.getName());
-        shortcut = new SimpleStringProperty(unitOfMeasure.getName());
+        shortcut = new SimpleStringProperty(unitOfMeasure.getShortcut());
     }
     
     private void getWrapperValues() {

@@ -15,7 +15,8 @@ import javafx.collections.ObservableList;
  */
 public interface IUnitOfMeasureService {
 
-    public ObservableList<UnitOfMeasureWrapper> populateAllUnits();
-    public boolean deleteData(List<UnitOfMeasureWrapper> unitOfMeasureToDelete);
-    public String validData(UnitOfMeasureWrapper unit);
+    ObservableList<UnitOfMeasureWrapper> populateAllUnits();
+    boolean deleteData(List<UnitOfMeasureWrapper> unitOfMeasureToDelete);
+    String validData(UnitOfMeasureWrapper unit);
+    ObservableList<UnitOfMeasureWrapper> filterByShortcut(String shortcut);
 }
