@@ -45,6 +45,13 @@ public class MainController implements Initializable {
     private Stage goodsStage;
     private GoodsController goodsController;
 
+    @Inject
+    private FXMLLoader unitsLoader;
+    private Parent unitsRoot;
+    private Scene unitsScene;
+    private Stage unitsStage;
+    private UnitController unitController;
+
     public Stage getStage() {
         return stage;
     }
@@ -57,6 +64,7 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         initContractorsWindow();
         initGoodsWindow();
+        initUnitsWindow();
     }
 
     private void initContractorsWindow() {
@@ -108,6 +116,30 @@ public class MainController implements Initializable {
         goodsController.populateData();
         currentContentSP.getChildren().clear();
         currentContentSP.getChildren().add(goodsRoot);
+    }
+
+    @FXML
+    private void showUnitsScene() {
+        unitController.populateData();
+        currentContentSP.getChildren().clear();
+        currentContentSP.getChildren().add(unitsRoot);
+    }
+
+    private void initUnitsWindow() {
+        try (InputStream mainFXML = getClass().getResourceAsStream("/fxml/UnitOfMeasure.fxml")) {
+            unitsRoot = unitsLoader.load(mainFXML);
+
+            unitsStage = new Stage();
+
+            unitsScene = new Scene(unitsRoot);
+            unitsStage.setScene(unitsScene);
+
+            unitController = unitsLoader.getController();
+            unitController.setStage(unitsStage);
+        } catch (IOException ex) {
+            logger.error("Error reading UnitOfMeasure.fxml file.");
+            logger.error(ex.getMessage());
+        }
     }
 
 }
