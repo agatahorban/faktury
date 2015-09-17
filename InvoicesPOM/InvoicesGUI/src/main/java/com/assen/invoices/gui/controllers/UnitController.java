@@ -119,12 +119,33 @@ public class UnitController implements Initializable {
     @FXML
     private void addNewRecord() {
         addUnitController.setIsEdit(false);
-//        addUnitController.populateReferencedData();
-//        addUnitController.setObsGoods(obsGoods);
+        addUnitController.populateReferencedData();
+        addUnitController.setObsUnits(obsUnits);
 
         addUnitsStage.show();
     }
 
+      @FXML
+    private void editUnits() {
+        List<UnitOfMeasureWrapper> unitsToEdit = unitsTV.getSelectionModel().getSelectedItems();
+        if (!unitsToEdit.isEmpty()) {
+            addUnitController.setIsEdit(true);
+            addUnitController.setUnit(unitsToEdit.get(0));
+            addUnitController.populateReferencedData();
+
+            addUnitsStage.showAndWait();
+
+            unitsTV.getColumns().get(0).setVisible(false);
+            unitsTV.getColumns().get(0).setVisible(true);
+        } else {
+            Alert warning = AlertUtil.createWarningAlert(props.getProperty("goods.edit.warning.title"),
+                    props.getProperty("goods.edit.warning.body"));
+
+            warning.showAndWait();
+        }
+    }
+    
+    
     private void initAddUnitsWindow() {
         try (InputStream addUnitsFXML = getClass().getResourceAsStream("/fxml/AddUnitOfMeasure.fxml")) {
             addUnitsRoot = addUnitsLoader.load(addUnitsFXML);

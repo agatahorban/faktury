@@ -16,11 +16,11 @@ public class UnitOfMeasureValidator {
         StringBuilder errors = new StringBuilder();
 
         if (nullOrEmptyValue(unit.getName())) {
-            errors.append("Nazwa nie może być pusta");
+            errors.append("Nazwa nie może być pusta \n");
         }
 
         if (nullOrEmptyValue(unit.getShortcut())) {
-            errors.append("Skrót nie może być pusty");
+            errors.append("Skrót nie może być pusty \n");
         }
         return errors.toString();
     }

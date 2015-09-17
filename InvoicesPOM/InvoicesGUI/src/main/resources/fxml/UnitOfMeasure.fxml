@@ -52,12 +52,12 @@
                               <Insets left="20.0" />
                            </HBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" text="Edytuj">
+                        <Button mnemonicParsing="false" onAction="#editUnits" text="Edytuj">
                            <HBox.margin>
                               <Insets left="20.0" />
                            </HBox.margin>
                         </Button>
-                        <Button mnemonicParsing="false" text="Dodaj" onAction="#addNewRecord">
+                        <Button mnemonicParsing="false" onAction="#addNewRecord" text="Dodaj">
                            <HBox.margin>
                               <Insets left="20.0" />
                            </HBox.margin>

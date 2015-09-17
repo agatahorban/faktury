@@ -61,7 +61,7 @@
                   </TextArea>
                   <HBox nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <Button mnemonicParsing="false" text="Anuluj">
+                        <Button mnemonicParsing="false" onAction="#cancel" text="Anuluj">
                            <HBox.margin>
                               <Insets left="20.0" right="20.0" />
                            </HBox.margin>
@@ -71,7 +71,7 @@
                               <Insets right="20.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="clearButton" mnemonicParsing="false" text="Wyczyść" />
+                        <Button fx:id="clearButton" mnemonicParsing="false" onAction="#clear" text="Wyczyść" />
                      </children>
                      <VBox.margin>
                         <Insets top="20.0" />

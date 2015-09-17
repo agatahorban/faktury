@@ -60,7 +60,7 @@ public class AddUnitController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        isEdit = false; 
     }
 
     public Stage getStage() {
@@ -98,6 +98,18 @@ public class AddUnitController implements Initializable {
         shortcutTF.textProperty().bindBidirectional(unit.shortcutProperty());
 
     }
+
+     public void populateReferencedData() {
+        if (!isEdit) {
+            setUnit(new UnitOfMeasureWrapper(new UnitOfMeasure()));
+            addEditButton.setText(props.getProperty("goods.add.button"));
+            clearButton.setVisible(true);
+        } else {
+            addEditButton.setText(props.getProperty("goods.edit.button"));
+            clearButton.setVisible(false);
+        }
+    }
+    
     
     @FXML
     private void addOrEdit() {
@@ -128,7 +140,7 @@ public class AddUnitController implements Initializable {
         }
     }
 
-     private boolean validData() {
+    private boolean validData() {
         String errors = unitOfMeasureService.validData(unit);
 
         if (!errors.equals("")) {
@@ -137,5 +149,20 @@ public class AddUnitController implements Initializable {
             return false;
         }
         return true;
+    }
+
+    @FXML
+    private void clear() {
+        unit.setUnitOfMeasure(new UnitOfMeasure());
+        setBindings();
+    }
+    
+     @FXML
+    private void cancel() {
+        errorsTA.setText("");
+        if (isEdit) {
+            unit.setUnitOfMeasure(originalUnit);
+        }
+        stage.close();
     }
 }
