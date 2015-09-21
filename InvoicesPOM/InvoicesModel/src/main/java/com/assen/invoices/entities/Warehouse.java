@@ -2,6 +2,7 @@ package com.assen.invoices.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,16 +25,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "warehouse")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Warehouse extends BasicEntity implements Serializable {
-    
+
     @Column(name = "name")
     @Size(max = 25)
     @XmlElement
     private String name;
-    
+
     @OneToMany(mappedBy = "warehouse", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @XmlElement
     private List<WarehouseGoods> warehouseGoods;
-    
+
     public Warehouse() {
         warehouseGoods = new ArrayList<>();
     }
@@ -54,5 +55,12 @@ public class Warehouse extends BasicEntity implements Serializable {
         this.warehouseGoods = warehouseGoods;
     }
 
-    
+    public static Warehouse copyOf(Warehouse warehouse) {
+        Warehouse newWarehouse = new Warehouse();
+        newWarehouse.setName(warehouse.getName());
+        newWarehouse.setVersion(warehouse.getVersion());
+        newWarehouse.setId(warehouse.getId());
+        newWarehouse.setWarehouseGoods(warehouse.getWarehouseGoods());
+        return newWarehouse;
+    }
 }

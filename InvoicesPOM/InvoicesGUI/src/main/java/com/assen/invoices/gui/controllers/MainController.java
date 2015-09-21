@@ -51,6 +51,13 @@ public class MainController implements Initializable {
     private Scene unitsScene;
     private Stage unitsStage;
     private UnitController unitController;
+    
+    @Inject
+    private FXMLLoader warehousesLoader;
+    private Parent warehousesRoot;
+    private Scene warehousesScene;
+    private Stage warehousesStage;
+    private WarehousesController warehousesController;
 
     public Stage getStage() {
         return stage;
@@ -65,6 +72,7 @@ public class MainController implements Initializable {
         initContractorsWindow();
         initGoodsWindow();
         initUnitsWindow();
+        initWarehousesWindow();
     }
 
     private void initContractorsWindow() {
@@ -124,6 +132,13 @@ public class MainController implements Initializable {
         currentContentSP.getChildren().clear();
         currentContentSP.getChildren().add(unitsRoot);
     }
+    
+    @FXML
+    private void showWarehousesScene() {
+        warehousesController.populateWarehouses();
+        currentContentSP.getChildren().clear();
+        currentContentSP.getChildren().add(warehousesRoot);
+    }
 
     private void initUnitsWindow() {
         try (InputStream mainFXML = getClass().getResourceAsStream("/fxml/UnitOfMeasure.fxml")) {
@@ -138,6 +153,23 @@ public class MainController implements Initializable {
             unitController.setStage(unitsStage);
         } catch (IOException ex) {
             logger.error("Error reading UnitOfMeasure.fxml file.");
+            logger.error(ex.getMessage());
+        }
+    }
+    
+    private void initWarehousesWindow() {
+        try (InputStream mainFXML = getClass().getResourceAsStream("/fxml/Warehouses.fxml")) {
+            warehousesRoot = warehousesLoader.load(mainFXML);
+
+            warehousesStage = new Stage();
+
+            warehousesScene = new Scene(warehousesRoot);
+            warehousesStage.setScene(warehousesScene);
+
+            warehousesController = warehousesLoader.getController();
+            warehousesController.setStage(warehousesStage);
+        } catch (IOException ex) {
+            logger.error("Error reading Warehouses.fxml file.");
             logger.error(ex.getMessage());
         }
     }

@@ -40,4 +40,8 @@
         <role-name>PERM_UNITS_MEAS</role-name>
         <group-name>PERM_UNITS_MEAS</group-name>
     </security-role-mapping>
+    <security-role-mapping>
+        <role-name>PERM_WAREHOUSE</role-name>
+        <group-name>PERM_WAREHOUSE</group-name>
+    </security-role-mapping>
 </glassfish-web-app>

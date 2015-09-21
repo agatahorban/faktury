@@ -14,6 +14,7 @@ INSERT INTO role_( version, name) VALUES (1, 'PERM_VAT_RATE');
 INSERT INTO role_( version, name) VALUES (1, 'PERM_CONTR');
 INSERT INTO role_( version, name) VALUES (1, 'PERM_PAYMENT_DATE');
 INSERT INTO role_( version, name) VALUES (1, 'PERM_PAYMENT_BANK');
+INSERT INTO role_( version, name) VALUES (1, 'PERM_WAREHOUSE');
 
 INSERT INTO group_(version, name) VALUES (1, 'Łódź');
 INSERT INTO collective_package(version, capacity, full_name, cut_name, depth, height, weight, width)
@@ -69,4 +70,5 @@ BEFORE DELETE
 ON contractor
 FOR EACH ROW
 EXECUTE PROCEDURE f_trig_cont();
-RETURN OLD;
+
+INSERT INTO warehouse(version, name) VALUES (1, 'Magazyn A');
