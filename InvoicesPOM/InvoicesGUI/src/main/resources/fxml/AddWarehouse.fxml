@@ -8,7 +8,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="193.0" prefWidth="274.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.assen.invoices.gui.controllers.add.AddWarehouseController">
    <children>
       <VBox prefHeight="200.0" prefWidth="100.0">
@@ -44,12 +43,12 @@
                         <Insets right="5.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#addOrEdit" text="Dodaj">
+                  <Button fx:id="addEditButton" mnemonicParsing="false" onAction="#addOrEdit" text="Dodaj">
                      <HBox.margin>
                         <Insets right="5.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#clear" text="Wyczyść" />
+                  <Button fx:id="clearButton" mnemonicParsing="false" onAction="#clear" text="Wyczyść" />
                </children>
                <VBox.margin>
                   <Insets top="5.0" />

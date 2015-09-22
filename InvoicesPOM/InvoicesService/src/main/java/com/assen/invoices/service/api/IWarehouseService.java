@@ -12,4 +12,6 @@ import javax.ejb.Local;
 public interface IWarehouseService {
     
     List<Warehouse> findAllWarehouses();
+    Warehouse insertNewWarehouse(Warehouse warehouse);
+    Warehouse updateWarehouse(Warehouse warehouse);
 }
