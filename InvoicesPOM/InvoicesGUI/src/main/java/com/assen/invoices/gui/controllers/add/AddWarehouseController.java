@@ -16,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,6 +61,10 @@ public class AddWarehouseController implements Initializable {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+        this.stage.setOnCloseRequest((WindowEvent event) -> {
+            event.consume();
+            cancel();
+        });
     }
 
     public void setIsEdit(boolean isEdit) {

@@ -23,6 +23,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.converter.NumberStringConverter;
 import javax.inject.Inject;
 import org.slf4j.Logger;
@@ -88,6 +89,10 @@ public class AddGoodsController implements Initializable {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+        this.stage.setOnCloseRequest((WindowEvent event) -> {
+            event.consume();
+            cancel();
+        });
     }
 
     public ObservableList<GoodsWrapper> getObsGoods() {
