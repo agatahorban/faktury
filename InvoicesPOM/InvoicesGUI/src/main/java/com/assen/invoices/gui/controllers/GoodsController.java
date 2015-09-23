@@ -136,8 +136,9 @@ public class GoodsController implements Initializable {
             goodsTV.getColumns().get(0).setVisible(false);
             goodsTV.getColumns().get(0).setVisible(true);
         } else {
-            Alert warning = AlertUtil.createWarningAlert(props.getProperty("goods.edit.warning.title"),
-                    props.getProperty("goods.edit.warning.body"));
+            Alert warning = AlertUtil.createWarningAlert(props.getProperty("edit.warning.title"),
+                    MessageFormat.format(props.getProperty("edit.warning.body"),
+                            "towar"));
 
             warning.showAndWait();
         }
@@ -147,8 +148,8 @@ public class GoodsController implements Initializable {
     private void deleteRecords() {
         List<GoodsWrapper> goodsToDelete = goodsTV.getSelectionModel().getSelectedItems();
         Alert deleteDialog = AlertUtil
-                .createConfirmationAlert(props.getProperty("goods.delete.confirmation.title"),
-                        MessageFormat.format(props.getProperty("goods.delete.confirmation.body"), 
+                .createConfirmationAlert(props.getProperty("delete.confirmation.title"),
+                        MessageFormat.format(props.getProperty("delete.confirmation.body"), 
                                 goodsToDelete.size()));
 
         Optional<ButtonType> result = deleteDialog.showAndWait();
@@ -156,8 +157,8 @@ public class GoodsController implements Initializable {
             boolean deleteSuccess = goodsService.deleteData(goodsToDelete);
 
             if (!deleteSuccess) {
-                Alert error = AlertUtil.createErrorAlert(props.getProperty("goods.delete.error.title"),
-                        props.getProperty("goods.delete.error.body"));
+                Alert error = AlertUtil.createErrorAlert(props.getProperty("delete.error.title"),
+                        props.getProperty("delete.error.body"));
 
                 error.showAndWait();
             } else {
@@ -172,7 +173,7 @@ public class GoodsController implements Initializable {
         obsGoods.addAll(goodsService
                 .filterByIndex1(searchTF.getText()));
         if (obsGoods.isEmpty()) {
-            Alert warning = AlertUtil.createWarningAlert(props.getProperty("goods.filter.warning.title"),
+            Alert warning = AlertUtil.createWarningAlert(props.getProperty("filter.warning.title"),
                     props.getProperty("goods.filter.warning.body"));
             warning.showAndWait();
         }
@@ -213,7 +214,9 @@ public class GoodsController implements Initializable {
             addGoodsRoot = addGoodsLoader.load(addGoodsFXML);
 
             addGoodsStage = new Stage();
-            addGoodsStage.setTitle(props.getProperty("goods.add.window.title"));
+            addGoodsStage.setTitle(MessageFormat.format(
+                    props.getProperty("add.window.title"),
+                    "towar"));
             addGoodsStage.initOwner(stage);
             addGoodsStage.initModality(Modality.APPLICATION_MODAL);
             addGoodsStage.setResizable(false);

@@ -173,10 +173,10 @@ public class AddGoodsController implements Initializable {
     public void populateReferencedData() {
         if (!isEdit) {
             setGoods(new GoodsWrapper(new Goods()));
-            addEditButton.setText(props.getProperty("goods.add.button"));
+            addEditButton.setText(props.getProperty("button.add"));
             clearButton.setVisible(true);
         } else {
-            addEditButton.setText(props.getProperty("goods.edit.button"));
+            addEditButton.setText(props.getProperty("button.edit"));
             clearButton.setVisible(false);
         }
 

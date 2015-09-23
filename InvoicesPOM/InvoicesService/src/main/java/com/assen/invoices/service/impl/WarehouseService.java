@@ -1,6 +1,7 @@
 package com.assen.invoices.service.impl;
 
 import com.assen.invoices.dao.api.IWarehouseDao;
+import com.assen.invoices.dto.WarehouseListDto;
 import com.assen.invoices.entities.Warehouse;
 import com.assen.invoices.service.api.IWarehouseService;
 import java.util.List;
@@ -41,5 +42,24 @@ public class WarehouseService implements IWarehouseService {
         logger.info("Updating data of warehouse: " + warehouse.getName()
                 + ", id: " + warehouse.getId());
         return warehouseDao.update(warehouse);
+    }
+
+    @Override
+    public boolean removeWarehouses(WarehouseListDto warehousesToDelete) {
+        logger.info("Deleting warehouse from database: " 
+                + warehousesToDelete.getWarehouses().size());
+        
+        try {
+            warehousesToDelete.getWarehouses().stream().parallel()
+                    .forEach((warehouseToDelete) -> {
+                        warehouseDao.remove(warehouseToDelete);
+                    });
+        } catch (Exception ex) {
+            logger.error("Error deleting warehouses from database: " + ex.getMessage());
+            
+            return false;
+        }
+        
+        return true;
     }
 }

@@ -66,4 +66,17 @@ public class WarehouseController {
             return Response.serverError().build();
         }
     }
+    
+    @POST
+    @Path("/delete")
+    @Consumes(MediaType.APPLICATION_XML)
+    @Produces(MediaType.APPLICATION_XML)
+    public Response deleteGoods(WarehouseListDto warehousesToDelete) {
+        boolean deleteResult = warehouseService.removeWarehouses(warehousesToDelete);
+        if (deleteResult) {
+            return Response.ok().build();
+        } else {
+            return Response.serverError().build();
+        }
+    }
 }

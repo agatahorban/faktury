@@ -8,7 +8,9 @@ import com.assen.invoices.gui.utils.PropertiesUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -17,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -81,8 +84,8 @@ public class WarehousesController implements Initializable {
             warehousesTV.getColumns().get(0).setVisible(false);
             warehousesTV.getColumns().get(0).setVisible(true);
         } else {
-            Alert warning = AlertUtil.createWarningAlert(props.getProperty("goods.edit.warning.title"),
-                    props.getProperty("goods.edit.warning.body"));
+            Alert warning = AlertUtil.createWarningAlert(props.getProperty("edit.warning.title"),
+                    MessageFormat.format(props.getProperty("edit.warning.body"),"magazyn"));
 
             warning.showAndWait();
         }
@@ -90,7 +93,24 @@ public class WarehousesController implements Initializable {
 
     @FXML
     private void deleteWarehouse() {
+        List<WarehouseWrapper> warehousesToDelete = warehousesTV.getSelectionModel().getSelectedItems();
+        Alert deleteDialog = AlertUtil
+                .createConfirmationAlert(props.getProperty("delete.confirmation.title"),
+                        MessageFormat.format(props.getProperty("delete.confirmation.body"), 
+                                warehousesToDelete.size()));
+        Optional<ButtonType> result = deleteDialog.showAndWait();
+        if (result.get().equals(ButtonType.OK)) {
+            boolean success = warehouseService.deleteData(warehousesToDelete);
+            
+            if(!success) {
+                Alert error = AlertUtil.createErrorAlert(props.getProperty("delete.error.title"),
+                        props.getProperty("delete.error.body"));
 
+                error.showAndWait();
+            } else {
+                warehouses.removeAll(warehousesToDelete);
+            }
+        }
     }
 
     @Override
@@ -110,7 +130,8 @@ public class WarehousesController implements Initializable {
             addWarehouseRoot = addWarehouseLoader.load(addWarehouseFXML);
 
             addWarehouseStage = new Stage();
-            addWarehouseStage.setTitle("Dodaj/Edytuj magazyn");
+            addWarehouseStage.setTitle(MessageFormat.format(props.getProperty("add.window.title"), 
+                    "magazyn"));
             addWarehouseStage.initOwner(stage);
             addWarehouseStage.initModality(Modality.APPLICATION_MODAL);
             addWarehouseStage.setResizable(false);
